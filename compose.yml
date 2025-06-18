@@ -1,7 +1,7 @@
 services:
   authserver-frontend:
     build: .
-    # Только внутри Docker сети
+    # Unicamente dentro del Docker net
     # expose:
     #   - 3000
     # args:
