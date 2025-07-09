@@ -4,9 +4,10 @@ on:
   push:
   # THIS IS FOR TESTING!!!
     branches: [ dev-add_merge_workflow ]  # Temporarily for testing - launch on any push to main
-  pull_request:
-    types: [closed]
-    branches: [ main ]
+  # THIS IS FOR PROD
+  # pull_request:
+  #   types: [closed]
+  #   branches: [ main ]
 
 jobs:
   deploy:
