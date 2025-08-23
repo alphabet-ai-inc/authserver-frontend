@@ -23,7 +23,7 @@ const Thisapp = () => {
             headers: headers, 
         }
 
-        fetch(`${process.env.REACT_APP_BACKEND}/admin/apps/${id}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps/${id}`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 setThisapp(data);

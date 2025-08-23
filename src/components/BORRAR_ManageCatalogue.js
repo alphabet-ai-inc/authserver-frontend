@@ -20,7 +20,7 @@
 //             headers: headers,
 //         }
 
-//         fetch(`${process.env.REACT_APP_BACKEND}/admin/apps`, requestOptions)
+//         fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps`, requestOptions)
 //             .then((response) => response.json())
 //             .then((data) => {
 //                 setApps(data);

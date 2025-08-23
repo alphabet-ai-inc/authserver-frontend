@@ -40,7 +40,7 @@ const Apps = () => {
             headers: headers,
         }
 
-        fetch(`${process.env.REACT_APP_BACKEND}/apps`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/apps`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 setApps(data);

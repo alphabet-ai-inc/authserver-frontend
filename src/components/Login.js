@@ -5,10 +5,13 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { setJwtToken } = useOutletContext();
-    const { setAlertClassName } = useOutletContext();
-    const { setAlertMessage } = useOutletContext();
-    const { toggleRefresh } = useOutletContext();
+    const {
+        setJwtToken,
+        setAlertClassName,
+        setAlertMessage,
+        toggleRefresh,
+        setIsLoggedInExplicitly,
+    } = useOutletContext();
 
     const navigate = useNavigate();
 
@@ -18,7 +21,7 @@ const Login = () => {
         let payload = {
             email: email,
             password: password,
-        }
+        };
 
         const requestOptions = {
             method: "POST",
@@ -27,9 +30,10 @@ const Login = () => {
             },
             credentials: "include",
             body: JSON.stringify(payload),
-        }
+        };
 
-        fetch(`${process.env.REACT_APP_BACKEND}/authenticate`, requestOptions)
+        // send the request to the backend
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/authenticate`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
@@ -39,16 +43,18 @@ const Login = () => {
                     setJwtToken(data.access_token);
                     setAlertClassName("d-none");
                     setAlertMessage("");
+                    setIsLoggedInExplicitly(true);
                     toggleRefresh(true);
                     navigate("/");
                 }
             })
-
             .catch(error => {
                 setAlertClassName("alert-danger");
-                setAlertMessage(error);
-            })
+                setAlertMessage("Login failure: " + error.message);
+            });
+
     }
+
     return (
         <div className="col-md-6 offset-md3">
             <h2>Login</h2>

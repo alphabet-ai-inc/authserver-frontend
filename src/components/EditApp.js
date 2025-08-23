@@ -78,7 +78,7 @@ const EditApp = () => {
                 headers: headers,
             };
 
-            fetch(`${process.env.REACT_APP_BACKEND}/admin/apps/${id}`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps/${id}`, requestOptions)
                 .then((response) => {
                     if (response.status !== 200) {
                         setError("Invalid response code: " + response.status)
@@ -149,7 +149,7 @@ const EditApp = () => {
             // credentials: "include",
         };
 
-        fetch(`${process.env.REACT_APP_BACKEND}/admin/apps/${thisapp.id}`, requestOptions)
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps/${thisapp.id}`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
@@ -191,7 +191,7 @@ const EditApp = () => {
                     headers: headers,
                 }
 
-                fetch(`${process.env.REACT_APP_BACKEND}/admin/apps/${thisapp.id}`, requestOptions)
+                fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps/${thisapp.id}`, requestOptions)
                     .then((response) => response.json())
                     .then((data) => {
                         if(data.error) {

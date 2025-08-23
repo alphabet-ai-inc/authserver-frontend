@@ -5,12 +5,12 @@ COPY package*.json ./
 COPY .env .
 RUN npm install
 COPY . .
-ARG REACT_APP_BACKEND
-# ENV REACT_APP_BACKEND=$REACT_APP_BACKEND
-RUN REACT_APP_BACKEND=$(grep -E '^REACT_APP_BACKEND=' .env | cut -d '=' -f2-) && \
-    export REACT_APP_BACKEND=${REACT_APP_BACKEND:-http://authserver-backend:8080} && \
-    npm run build
-
+ARG REACT_APP_BACKEND_URL
+# ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+# RUN REACT_APP_BACKEND_URL=$(grep -E '^REACT_APP_BACKEND_URL=' .env | cut -d '=' -f2-) && \
+#    export REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL:-http://authserver-backend:8080} && \
+#    npm run build
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL:-http://authserver-backend:8080}
 RUN npm run build
 
 # Stage 2: Serve the app
