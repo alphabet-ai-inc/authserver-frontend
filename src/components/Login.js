@@ -1,21 +1,26 @@
 import { useState } from "react";
-import Input from "./form/Input";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { Input } from "./form/Input";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const {
         setJwtToken,
-        setAlertClassName,
-        setAlertMessage,
-        toggleRefresh,
         setIsLoggedInExplicitly,
-    } = useOutletContext();
+        toggleRefresh,
+        // logOut,
+    } = useAuth();
+
+    const [alertClassName, setAlertClassName] = useState("d-none");
+    const [alertMessage, setAlertMessage] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const [loading, setLoading] = useState(false); // Added loading state
 
     const navigate = useNavigate();
-
     const handleSubmit = (event) => {
+        setIsLoggedInExplicitly(true);
         event.preventDefault();
         // built the request payload
         let payload = {
@@ -32,7 +37,8 @@ const Login = () => {
             body: JSON.stringify(payload),
         };
 
-        // send the request to the backend
+        setLoading(true); // Set loading to true when the request starts
+
         fetch(`${process.env.REACT_APP_BACKEND_URL}/authenticate`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
@@ -40,25 +46,28 @@ const Login = () => {
                     setAlertClassName("alert-danger");
                     setAlertMessage(data.message);
                 } else {
-                    setJwtToken(data.access_token);
-                    setAlertClassName("d-none");
-                    setAlertMessage("");
                     setIsLoggedInExplicitly(true);
                     toggleRefresh(true);
-                    navigate("/");
+                    setJwtToken(data.access_token);
+                    navigate("/apps");
                 }
             })
             .catch(error => {
                 setAlertClassName("alert-danger");
                 setAlertMessage("Login failure: " + error.message);
+            })
+            .finally(() => {
+                setLoading(false); // Set loading back to false when the request finishes, whether it's successful or not
             });
-
-    }
-
+        }
+    
     return (
         <div className="col-md-6 offset-md3">
             <h2>Login</h2>
             <hr />
+            <div className={`alert ${alertClassName}`} role="alert">  {/* USING alertClassName */}
+                {alertMessage}
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <Input
@@ -83,10 +92,11 @@ const Login = () => {
                 <Input
                     type="submit"
                     className="btn btn-primary"
-                    value="Login"
+                    value={loading ? "Logging in..." : "Login"} // Change the button text based on the loading state
+                    disabled={loading} // Disable the button while loading
                 />
             </form>
         </div>
-    )
-}
-export default Login;
+    );
+};
+export { Login }

@@ -6,4 +6,4 @@ const Biometrics = () => {
         </div>
     )
 }
-export default Biometrics;
+export { Biometrics };

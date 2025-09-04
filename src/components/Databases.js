@@ -6,4 +6,4 @@ const Databases = () => {
         </div>
     )
 }
-export default Databases;
+export { Databases };

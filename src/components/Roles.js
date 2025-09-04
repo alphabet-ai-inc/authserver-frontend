@@ -8,4 +8,4 @@ const Roles = () => {
         </>
     )
 }
-export default Roles;
+export { Roles };

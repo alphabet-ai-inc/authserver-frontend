@@ -6,4 +6,4 @@ const IPs = () => {
         </div>
     )
 }
-export default IPs;
+export { IPs };

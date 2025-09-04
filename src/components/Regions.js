@@ -6,4 +6,4 @@ const Regions = () => {
         </div>
     )
 }
-export default Regions;
+export { Regions };

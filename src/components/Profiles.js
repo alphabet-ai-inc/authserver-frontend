@@ -6,4 +6,4 @@ const Profiles = () => {
         </div>
     )
 }
-export default Profiles;
+export { Profiles };

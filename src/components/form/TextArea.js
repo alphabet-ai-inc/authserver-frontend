@@ -17,4 +17,4 @@ const TextArea =(props) => {
     )
 }
 
-export default TextArea;
+export { TextArea };

@@ -23,4 +23,4 @@ const Input = forwardRef((props, ref) => {
     )
 })
 
-export default Input;
+export { Input };

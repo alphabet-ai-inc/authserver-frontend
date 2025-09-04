@@ -6,4 +6,4 @@ const Groups = () => {
         </div>
     )
 }
-export default Groups;
+export { Groups };

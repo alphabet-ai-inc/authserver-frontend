@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
 const Apps = () => {
+    const { jwtToken } = useAuth();
+
     const [apps, setApps] = useState([]);
-    const { jwtToken } = useOutletContext();
     const navigate = useNavigate();
 
     const releaseOptions = [
@@ -93,4 +94,4 @@ const Apps = () => {
         </div>
     )
 }
-export default Apps;
+export { Apps };

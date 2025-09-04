@@ -1,0 +1,50 @@
+/* Container styling */
+.app-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: auto;
+  font-family: 'Arial, sans-serif';
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Alert styles */
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.alert-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Title styling */
+.title {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Info list styles */
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Web info specific style */
+.web-info {
+  margin-top: 10px;
+  font-weight: normal;
+  color: #555;
+}
