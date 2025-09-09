@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
+import { NavBar } from "./NavBar";
+
 const Apps = () => {
     const { jwtToken } = useAuth();
 
@@ -27,12 +29,12 @@ const Apps = () => {
         }
     }
 
-    useEffect( () => {
+    useEffect(() => {
         if (jwtToken === "") {
             navigate("/login");
             return
         }
-        const headers= new Headers();
+        const headers = new Headers();
         headers.append("Content-Type", "application/json");
         headers.append("Authorization", "Bearer " + jwtToken);
 
@@ -52,46 +54,50 @@ const Apps = () => {
     }, [jwtToken, navigate]);
 
     return (
-        <div>
-            <h2>Apps</h2>
-            <Link
-                to="/admin/thisapp/0"
-                className="list-group-item list-group-item-action"
-            >
-            <h3> 
-                Add App
-            </h3>
-            </Link>
-            <hr />
-            <table className="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Release</th>
-                        <th>Path</th>
-                        <th>Init</th>
-                        <th>Web</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {apps.map((m) => (
-                        <tr key={m.id}>
-                            <td>
-                                <Link to={`/thisapp/${m.id}`}>
-                                    {m.name}
-                                </Link>
-                            </td>
-                            <td>{m.release ? releaseOptions[getIndex(m.release)].value : m.release}</td>
-                            <td>{m.path}</td>
-                            <td>{m.init}</td>
-                            <td>{m.web}</td>
-                            <td>{m.title}</td>
+        <>
+
+            <NavBar />
+            <div className="list-container">
+                <h2>Apps</h2>
+                <Link
+                    to="/editapp/0"
+                    className="list-group-item list-group-item-action"
+                >
+                    <h3>
+                        Add App
+                    </h3>
+                </Link>
+                <hr />
+                <table className="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Release</th>
+                            <th>Path</th>
+                            <th>Init</th>
+                            <th>Web</th>
+                            <th>Title</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {apps.map((m) => (
+                            <tr key={m.id}>
+                                <td>
+                                    <Link to={`/thisapp/${m.id}`}>
+                                        {m.name}
+                                    </Link>
+                                </td>
+                                <td>{m.release ? releaseOptions[getIndex(m.release)].value : m.release}</td>
+                                <td>{m.path}</td>
+                                <td>{m.init}</td>
+                                <td>{m.web}</td>
+                                <td>{m.title}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
     )
 }
 export { Apps };

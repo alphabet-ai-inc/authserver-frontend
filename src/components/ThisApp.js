@@ -5,6 +5,7 @@ import "../style/Read.css"
 import { useHandleDelete } from "../utils/HandleDel";
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
+import { NavBar } from "./NavBar";
 
 const Thisapp = () => {
     const { 
@@ -74,6 +75,8 @@ const Thisapp = () => {
     }, [id, jwtToken, sessionChecked, navigate, setJwtToken]);
 
     return (
+        <>
+        <NavBar />  
         <div className="app-container">
             <div className={`alert ${alertClassName}`} role="alert">
                 {alertMessage}
@@ -99,6 +102,7 @@ const Thisapp = () => {
                 }
             </div>
         </div>
+        </>
     );
 }
 

@@ -9,6 +9,7 @@ import "../style/Read.css";
 import { useAuth } from "../context/AuthContext";
 import "../style/Edit.css";
 import { formatUnixTimestamp } from "../utils/Unix2Ymd";
+import { NavBar } from "./NavBar";
 
 const EditApp = () => {
     const { jwtToken, sessionChecked } = useAuth();
@@ -56,6 +57,19 @@ const EditApp = () => {
         }
 
         const fetchData = async () => {
+            if (!sessionChecked) return; // Wait for session check to complete
+            if (!jwtToken) {
+                Swal.fire({
+                    title: 'Token Invalid',
+                    text: 'Your token is invalid. Please log in again.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    navigate("/login");
+                });
+                return; // Prevent further execution if token is invalid
+            }
+
             try {
                 if (appId !== 0) { // Only fetch if it's an existing app
                     const headers = new Headers({
@@ -107,16 +121,40 @@ const EditApp = () => {
         if (!thisapp.release) newErrors.release = "Release is required";
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors).length === 0; // Return true if no errors
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent the default form submission
 
+        if (!sessionChecked) {
+            Swal.fire({
+                title: 'Session is not valid now',
+                text: 'Probably, your session expires. Please, log in again.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate("/login");
+            });
+
+            return; // Wait for session check to complete
+        }
+        if (!jwtToken) {
+            Swal.fire({
+                title: 'Token is not valid now',
+                text: 'Probably, your token expires. Please, log in again.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                navigate("/login");
+            });
+            return; // Prevent further execution if token is invalid
+        }
+
         if (!validateForm()) {
             Swal.fire({
                 title: 'Invalid form',
-                text: 'Please correct the errors in the form.',
+                text: JSON.stringify(errors) + ' Please correct the errors in the form.',
                 icon: 'warning',
                 confirmButtonText: 'OK'
             });
@@ -138,7 +176,7 @@ const EditApp = () => {
                 "Authorization": `Bearer ${jwtToken}`
             });
             const method = isNewApp ? "POST" : "PATCH"; // Use POST for creating new apps, PATCH for updating
-            const url = `${process.env.REACT_APP_BACKEND_URL}/admin/apps/${isNewApp ? '' : thisapp.id}`; // Adjust URL for create/update
+            const url = `${process.env.REACT_APP_BACKEND_URL}/admin/apps/${isNewApp ? '0' : thisapp.id}`; // Adjust URL for create/update
 
             const requestOptions = {
                 method: method,
@@ -147,20 +185,32 @@ const EditApp = () => {
             };
 
             const response = await fetch(url, requestOptions);
+
+            if (response.status === 401) {
+                Swal.fire({
+                    title: 'Session Expired',
+                    text: 'Your session has expired. Please log in again.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    navigate("/login");
+                });
+                return; // Stop further execution
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
-                // Handle server-side validation errors or other issues
+                // Handle other server-side validation errors or issues
                 console.error("Server error:", data);
                 Swal.fire({
                     title: 'Server Error',
-                    text: data.message || 'An error occurred while saving.', // Display error message from the server
+                    text: data.message || 'An error occurred while saving.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
                 return;
             }
-
             // On successful save
             Swal.fire({
                 title: 'Success!',
@@ -168,7 +218,7 @@ const EditApp = () => {
                 icon: 'success',
                 confirmButtonText: 'OK'
             }).then(() => {
-                navigate("/admin/apps"); // Navigate to the app list or details page
+                navigate(`/editapp/${thisapp.id}`); // Navigate to the details page
             });
 
 
@@ -193,6 +243,10 @@ const EditApp = () => {
 
     const handleDelete = useHandleDelete(thisapp.id, jwtToken);
 
+    const dismissAlert = () => {
+        setError(null);
+    };
+
     if (error) {
         Swal.fire({
             title: 'Error!',
@@ -203,140 +257,143 @@ const EditApp = () => {
     }
 
     return (
-        <div>
-            <form class="edit-app-form" onSubmit={handleSubmit}>
-                <h2>{appId === 0 ? 'Add App' : 'Edit App'}</h2>
-                <hr />
-                <input type="hidden" name="id" value={thisapp.id} readOnly />
-                <div className="form-group">
-                    <label htmlFor="appName">App Name</label>
-                    <Input
-                        id={"appName"}
-                        // title={"Name"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"name"}
-                        placeholder={"Enter app name"}
-                        value={thisapp.name}
-                        onChange={handleChange}
-                        errorMsg={errors.name}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="appRelease">App Release</label>
-                    <Select
-                        id={"appRelease"}
-                        // title={"Release"}
-                        // name={"release"}
-                        className={"form-select"}
-                        options={releaseOptions}
-                        value={thisapp.release}
-                        onChange={handleChange}
-                        errorMsg={errors.release}
-                    />
-                </div>
+        <>
+            <NavBar />
+            <div className="edit-container">
+                <form className="edit-app-form" onSubmit={handleSubmit}>
+                    <h2>{appId === 0 ? 'Add App' : 'Edit App'}</h2>
+                    <hr />
+                    <input type="hidden" name="id" value={thisapp.id} readOnly />
+                    <div className="form-group">
+                        <label htmlFor="appName">App Name</label>
+                        <Input
+                            id={"appName"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"name"}
+                            placeholder="Enter app name"
+                            value={thisapp.name}
+                            onChange={handleChange}
+                            errorMsg={errors.name}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="appRelease">App Release</label>
+                        <Select
+                            id={"appRelease"}
+                            name={"release"}
+                            className={"form-select"}
+                            options={releaseOptions}
+                            value={thisapp.release}
+                            onChange={handleChange}
+                            errorMsg={errors.release}
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label htmlFor="appPath">App Path</label>
-                    <Input
-                        id={"appPath"}
-                        // title={"Path"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"path"}
-                        placeholder={"Enter app path"}
-                        value={thisapp.path}
-                        onChange={handleChange}
-                        errorMsg={errors.path}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="appInit">App Init</label>
-                    <Input
-                        id={"appInit"}
-                        // title={"Init"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"init"}
-                        placeholder={"Enter app init"}
-                        value={thisapp.init}
-                        onChange={handleChange}
-                        errorMsg={errors.init}
-                    />
-                </div>
+                    <div className="form-group">
+                        <label htmlFor="appPath">App Path</label>
+                        <Input
+                            id={"appPath"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"path"}
+                            placeholder="Enter app path"
+                            value={thisapp.path}
+                            onChange={handleChange}
+                            errorMsg={errors.path}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="appInit">App Init</label>
+                        <Input
+                            id={"appInit"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"init"}
+                            placeholder="Enter app init"
+                            value={thisapp.init}
+                            onChange={handleChange}
+                            errorMsg={errors.init}
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label htmlFor="appWeb">App Web</label>
-                    <Input
-                        id={"appWeb"}
-                        // title={"Web"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"web"}
-                        placeholder={"Enter app web"}
-                        value={thisapp.web}
-                        onChange={handleChange}
-                        errorMsg={errors.web}
-                    />
-                </div>
+                    <div className="form-group">
+                        <label htmlFor="appWeb">App Web</label>
+                        <Input
+                            id={"appWeb"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"web"}
+                            placeholder="Enter app web"
+                            value={thisapp.web}
+                            onChange={handleChange}
+                            errorMsg={errors.web}
+                        />
+                    </div>
 
-                <div className="form-group">
-                    <label htmlFor="appTitle">App Title</label>
-                    <TextArea
-                        id={"appTitle"}
-                        // title={"Title"}
-                        className={"form-control"}
-                        type={"textarea"}
-                        // name={"title"}
-                        placeholder={"Enter app title"}
-                        value={thisapp.title}
-                        onChange={handleChange}
-                        errorMsg={errors.title}
-                    />
-                </div>
-                <div className="form-meta">
-                    <label htmlFor="appCreated">App Created</label>
-                    <Input
-                        id={"appCreated"}
-                        // title={"Created"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"created"}
-                        placeholder={"Created is auto-generated"}
-                        value={formatUnixTimestamp(thisapp.created)}
-                        readOnly={true}
-                    />
-                </div>
-                <div className="form-meta">
-                    <label htmlFor="appUpdated">App Updated</label>
-                    <Input
-                        id={"appUpdated"}
-                        // title={"Updated"}
-                        className={"form-control"}
-                        type={"text"}
-                        name={"updated"}
-                        placeholder={"Updated is auto-generated"}
-                        value={formatUnixTimestamp(thisapp.updated)}
-                        readOnly={true}
-                    />
-                </div>
-                <hr />
-                <div className="form-action">
-                    <button className="btn btn-primary" type="submit">Save</button>
-                    {thisapp.id > 0 && (
-                        <button type="button" className="btn btn-danger ms-2" onClick={handleDelete}>
-                            Delete App
-                        </button>
+                    <div className="form-group">
+                        <label htmlFor="appTitle">App Title</label>
+                        <TextArea
+                            id={"appTitle"}
+                            name={"title"}
+                            className={"form-control"}
+                            type={"textarea"}
+                            placeholder="Enter app title"
+                            value={thisapp.title}
+                            onChange={handleChange}
+                            errorMsg={errors.title}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="appCreated">App Created</label>
+                        <Input
+                            id={"appCreated"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"created"}
+                            placeholder="Created is auto-generated"
+                            value={
+                                thisapp.created
+                                    ? formatUnixTimestamp(thisapp.created)
+                                    : "Not yet created"
+                            }
+                            readOnly={true}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="appUpdated">App Updated</label>
+                        <Input
+                            id={"appUpdated"}
+                            className={"form-control"}
+                            type={"text"}
+                            name={"updated"}
+                            placeholder="Updated is auto-generated"
+                            value={
+                                thisapp.updated
+                                    ? formatUnixTimestamp(thisapp.updated)
+                                    : "Not yet updated"
+                            }
+                            readOnly={true}
+                        />
+                    </div>
+                    <hr />
+                    <div className="form-action">
+                        <button className="btn btn-primary" type="submit">save</button>
+                        {thisapp.id > 0 && (
+                            <button type="button" className="btn btn-danger ms-2" onClick={handleDelete}>
+                                Delete App
+                            </button>
 
-                    )}
-                </div>
+                        )}
+                    </div>
 
-                <div className="form-alert hidden" id="formAlert">
-                    <p>Error! Please check your inputs.</p>
-                    <button onClick="dismissAlert()">OK</button>
-                </div>
-            </form>
-        </div>
+                    <div className="form-alert hidden" id="formAlert">
+                        <p>Error! Please check your inputs.</p>
+                        <button onClick={dismissAlert}>OK</button>
+                    </div>
+                </form>
+            </div>
+        </>
     );
 };
 

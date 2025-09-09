@@ -20,6 +20,17 @@ import { Thisapp } from './components/ThisApp';
 import { EditApp } from './components/EditApp';
 import { AuthProvider } from "./context/AuthContext";
 
+// Override console.error to ignore websocket errors. 
+// websocket is important in continuous operation, so we don't want to log these errors.
+// for instance, chat applications rely on websockets for real-time communication
+const originalError = console.error;
+console.error = function (...args) {
+  if (args.some(arg => typeof arg === "string" && arg.toLowerCase().includes("websocket"))) {
+    return; // Ignore websocket errors
+  }
+  originalError.apply(console, args);
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -39,7 +50,7 @@ root.render(
           <Route path="/regions" element={<Regions />} />
           <Route path="/biometrics" element={<Biometrics />} />
           <Route path="/thisapp/" element={<Thisapp />} />
-          <Route path="/thisapp/0" element={<Thisapp />} />
+          <Route path="/editapp/0" element={<EditApp />} />
           <Route path="/thisapp/:id" element={<Thisapp />} />
           <Route path="/editapp/:id" element={<EditApp />} />
           <Route path="/login" element={<Login />} />

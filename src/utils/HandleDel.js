@@ -47,7 +47,7 @@ export const useHandleDelete = (id) => {
                         confirmButtonText: 'OK'
                     });
                 } else {
-                    navigate(`/admin/apps`);
+                    navigate(`/apps`);
                 }
             }
             catch (err) {

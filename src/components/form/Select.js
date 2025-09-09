@@ -2,11 +2,11 @@ const Select =(props) => {
     return (
         <div className="mb-3">
             <label htmlFor={props.name} className="form-label">
-                {props.name}
+                {props.title}
             </label>
             <select
-                className="form-select"
-                id={props.name}
+                className={`${props.className} form-select ${props.error ? 'is-invalid' : ''}`}
+                id={props.id}
                 name={props.name}
                 value={props.value}
                 onChange={props.onChange}
