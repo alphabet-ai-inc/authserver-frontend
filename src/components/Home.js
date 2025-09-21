@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { useAuthSession } from '../hooks/useAuthSession';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '../utils/Alert';
+import '../style/Home.css';
 
 function LoginPrompt({ handleLogin }) {
     return (
-        <div style={{ textAlign: 'center' }}>
-                <img src={Security} alt="security" onClick={handleLogin} style={{ cursor: 'pointer' }} />
-                <button className="btn btn-success" onClick={handleLogin} style={{ marginTop: '1rem' }}>
+        <div className='home-container'>
+                <img src={Security} alt="security" onClick={handleLogin} />
+                <button onClick={handleLogin}>
                     Login
                 </button>
         </div>

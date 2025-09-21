@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { NavBar } from "./NavBar";
+// import "../style/Read.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Apps = () => {
     const { jwtToken } = useAuth();
@@ -55,15 +57,17 @@ const Apps = () => {
 
     return (
         <>
-
             <NavBar />
             <div className="list-container">
-                <h2>Apps</h2>
+                <h2 style={{ display: "block", textAlign: "center" }}>
+                    Apps List
+                </h2>
                 <Link
                     to="/editapp/0"
                     className="list-group-item list-group-item-action"
                 >
                     <h3>
+                        <i className="bi bi-plus-circle" style={{ marginRight: 8 }}></i>
                         Add App
                     </h3>
                 </Link>

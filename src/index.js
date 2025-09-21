@@ -15,7 +15,7 @@ import { Regions } from './components/Regions';
 import { Biometrics } from './components/Biometrics';
 import { Login } from './components/Login';
 // import Logout from './components/Logout';
-import { Thisapp } from './components/ThisApp';
+import { ThisApp } from './components/ThisApp';
 // import ManageCatalogue from './components/ManageCatalogue';
 import { EditApp } from './components/EditApp';
 import { AuthProvider } from "./context/AuthContext";
@@ -49,9 +49,9 @@ root.render(
           <Route path="/ips" element={<IPs />} />
           <Route path="/regions" element={<Regions />} />
           <Route path="/biometrics" element={<Biometrics />} />
-          <Route path="/thisapp/" element={<Thisapp />} />
+          <Route path="/thisapp/" element={<ThisApp />} />
           <Route path="/editapp/0" element={<EditApp />} />
-          <Route path="/thisapp/:id" element={<Thisapp />} />
+          <Route path="/thisapp/:id" element={<ThisApp />} />
           <Route path="/editapp/:id" element={<EditApp />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<App />} />
@@ -60,79 +60,3 @@ root.render(
     </AuthProvider>
   </React.StrictMode>
 );
-// children: [
-//   { index: true, element: <Home /> },
-//   {
-//     path: "/home",
-//     element: <Home />,
-//   },
-//   {
-//     path: "/apps",
-//     element: <Apps />,
-//   },
-//   {
-//     path: "/apps/:id",
-//     element: <Thisapp />,
-//   },
-//   {
-//     path: "/databases",
-//     element: <Databases />,
-//   },
-//   {
-//     path: "/roles",
-//     element: <Roles />,
-//   },
-//   {
-//     path: "/users",
-//     element: <Users />,
-//   },
-//   {
-//     path: "/groups",
-//     element: <Groups />,
-//   },
-//   {
-//     path: "/profiles",
-//     element: <Profiles />,
-//   },
-//   {
-//     path: "/ips",
-//     element: <IPs />,
-//   },
-//   {
-//     path: "/regions",
-//     element: <Regions />,
-//   },
-//   {
-//     path: "/biometrics",
-//     element: <Biometrics />,
-//   },
-//   {
-//     path: "login",
-//     element: <Login />,
-//   },
-// {
-//   path: "/logout",
-//   element: <Logout />,
-// },
-// {
-//   path: "/manage-catalogue",
-//   element: <ManageCatalogue />,
-// },
-// {
-//   path: "/thisapp/:id",
-//   element: <EditApp />,
-// },
-// {
-//   path: "/admin/thisapp/0",
-//   element: <EditApp />,
-// },
-//     ],
-//   },
-// ]);
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(
-//   <React.StrictMode>
-//     <RouterProvider router={router} />
-//   </React.StrictMode>
-// );

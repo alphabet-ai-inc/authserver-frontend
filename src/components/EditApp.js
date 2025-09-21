@@ -5,7 +5,6 @@ import { Select } from "./form/Select";
 import { TextArea } from "./form/TextArea";
 import Swal from "sweetalert2";
 import { useHandleDelete } from "../utils/HandleDel";
-import "../style/Read.css";
 import { useAuth } from "../context/AuthContext";
 import "../style/Edit.css";
 import { formatUnixTimestamp } from "../utils/Unix2Ymd";

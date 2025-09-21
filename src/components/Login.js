@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "./form/Input";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../style/Edit.css";
 
 const Login = () => {
     const {
@@ -62,16 +63,17 @@ const Login = () => {
         }
     
     return (
-        <div className="col-md-6 offset-md3">
+        <div className="edit-container">
             <h2>Login</h2>
             <hr />
             <div className={`alert ${alertClassName}`} role="alert">  {/* USING alertClassName */}
                 {alertMessage}
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form className="edit-app-form" onSubmit={handleSubmit} data-testid="LoginForm">
                 <Input
                     title="Email Address"
+                    data-testid="email-address"
                     type="email"
                     className="form-control"
                     name="email"
@@ -81,6 +83,7 @@ const Login = () => {
 
                 <Input
                     title="Password"
+                    data-testid="password"
                     type="password"
                     className="form-control"
                     name="password"

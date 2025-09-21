@@ -1,15 +1,7 @@
 services:
   authserver-frontend:
     build: .
-    # Unicamente dentro del Docker net
-    # expose:
-    #   - 3000
-    # args:
-    #   - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
-    # environment:
-    #  - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
     image: authserver-frontend   # <-- Add this line
-
     environment:
     - REACT_APP_BACKEND_URL=http://authserver-backend:8080
     ports:

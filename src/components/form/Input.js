@@ -10,6 +10,7 @@ const Input = forwardRef((props, ref) => {
                 type={props.type}
                 className={props.className}
                 id={props.id}
+                data-testid={props['data-testid']}
                 ref={ref}
                 name={props.name}
                 placeholder={props.placeholder}
