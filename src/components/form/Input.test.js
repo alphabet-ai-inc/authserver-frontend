@@ -5,14 +5,15 @@ describe('Input', () => {
   test('renders with label and value', () => {
     render(
       <Input
+        id="username"
         name="username"
+        label="Username"
         title="Username"
         type="text"
         className="form-control"
-        id="username"
         data-testid="username-input"
         value="testuser"
-        onChange={() => {}}
+        onChange={() => { }}
         errorDiv="error-div"
         errorMsg=""
       />
@@ -25,11 +26,11 @@ describe('Input', () => {
     const handleChange = jest.fn();
     render(
       <Input
+        id="email"
         name="email"
         title="Email"
-        type="email"
         className="form-control"
-        id="email"
+        type="email"
         data-testid="email-input"
         value=""
         onChange={handleChange}
@@ -45,14 +46,14 @@ describe('Input', () => {
   test('renders error message', () => {
     render(
       <Input
+        id="password"
         name="password"
         title="Password"
         type="password"
         className="form-control"
-        id="password"
         data-testid="password-input"
         value=""
-        onChange={() => {}}
+        onChange={() => { }}
         errorDiv="error-div"
         errorMsg="Password is required"
       />

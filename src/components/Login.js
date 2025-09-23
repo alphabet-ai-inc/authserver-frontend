@@ -2,8 +2,15 @@ import { useState } from "react";
 import { Input } from "./form/Input";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import "../style/Edit.css";
-
+/**
+ * Login component for user authentication.
+ * @returns {JSX.Element}   The rendered login form component.
+ * User validation is handled by the backend.
+ * On successful login, the JWT token is stored in context and user is redirected to /apps.
+ * On failure, an error message is displayed.
+ * For now, the login form is basic and uses only email and password fields.
+ * Future improvements could include "Remember Me" functionality, password reset, and OAuth integration.
+ */
 const Login = () => {
     const {
         setJwtToken,
@@ -60,46 +67,49 @@ const Login = () => {
             .finally(() => {
                 setLoading(false); // Set loading back to false when the request finishes, whether it's successful or not
             });
-        }
-    
+    }
+
     return (
-        <div className="edit-container">
-            <h2>Login</h2>
-            <hr />
-            <div className={`alert ${alertClassName}`} role="alert">  {/* USING alertClassName */}
-                {alertMessage}
-            </div>
+        <>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></link>
 
-            <form className="edit-app-form" onSubmit={handleSubmit} data-testid="LoginForm">
-                <Input
-                    title="Email Address"
-                    data-testid="email-address"
-                    type="email"
-                    className="form-control"
-                    name="email"
-                    autoComplete="email-new"
-                    onChange={(event) => setEmail(event.target.value)}
-                />
-
-                <Input
-                    title="Password"
-                    data-testid="password"
-                    type="password"
-                    className="form-control"
-                    name="password"
-                    autoComplete="password-new"
-                    onChange={(event) => setPassword(event.target.value)}
-                />
+            <div className="container py-4">
+                <h2 style={{ textAlign: "center" }}>Login</h2>
                 <hr />
+                <div className={`alert ${alertClassName}`} role="alert">  {/* USING alertClassName */}
+                    {alertMessage}
+                </div>
 
-                <Input
-                    type="submit"
-                    className="btn btn-primary"
-                    value={loading ? "Logging in..." : "Login"} // Change the button text based on the loading state
-                    disabled={loading} // Disable the button while loading
-                />
-            </form>
-        </div>
+                <form onSubmit={handleSubmit} data-testid="LoginForm">
+                    <Input
+                        label={"Email Address"}
+                        data-testid={"email-address"}
+                        type={"email"}
+                        className={"form-control"}
+                        name={"email"}
+                        autoComplete={"email-new"}
+                        onChange={(event) => setEmail(event.target.value)}
+                    />
+
+                    <Input
+                        label={"Password"}
+                        data-testid={"password"}
+                        type={"password"}
+                        className={"form-control"}
+                        name={"password"}
+                        autoComplete={"password-new"}
+                        onChange={(event) => setPassword(event.target.value)}
+                    />
+                    <hr />
+                    <div className="d-flex gap-2">
+                        <button className="btn btn-success" type="submit" disabled={loading}>
+                            <i className="bi bi-login"></i> {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </>
     );
 };
 export { Login }

@@ -1,8 +1,29 @@
 import { useCallback, useEffect, useState } from 'react';
 import Swal from "sweetalert2";
 
+/**
+ * Interval duration for token refresh in milliseconds.
+ */
 const REFRESH_INTERVAL = 600000; // 10 minutes
-
+/**
+ * 
+ * @param {*} backendUrl 
+ * @returns jwtToken, that is the JWT token string. This token is used for authenticating requests to the backend.
+ * setJwtToken, that is a function to update the jwtToken state.
+ * sessionChecked, that is a boolean indicating whether the session check has been completed.
+ * isLoggedInExplicitly, that indicates if the user has logged in explicitly.
+ * setIsLoggedInExplicitly changes the isLoggedInExplicitly state.
+ * toggleRefresh is a function to start or stop the periodic token refresh.
+ * logOut is a function to log out the user.
+ * sessionValid, that is a boolean indicating whether the session is valid.
+ * tokenValid, that is a boolean indicating whether the token is valid.
+ * 
+ * This hook manages authentication state, including token refresh, session validation,
+ * and logout functionality. It uses the provided backendUrl to interact with the authentication backend.
+ * 
+ * In the future, consider splitting this hook into smaller, more focused hooks for better maintainability. Some times it will be necessary to use only the logout function
+ * or the toggleRefresh function or the jwtToken state.
+ */
 export function useAuthSession(backendUrl) {
     if (!backendUrl) throw new Error("backendUrl is required");
 
@@ -88,7 +109,9 @@ export function useAuthSession(backendUrl) {
             });
         }
     }, [backendUrl, toggleRefresh]);
-
+/**
+ * Check session on mount and validate token/session when jwtToken or sessionChecked changes.
+ */
     useEffect(() => {
         if (!backendUrl) {
             console.error('REACT_APP_BACKEND_URL is missing.');
@@ -121,7 +144,9 @@ export function useAuthSession(backendUrl) {
 
         checkSession();
     }, [backendUrl, setAuthStateProperty]);
-
+/**
+ * Validate session with the backend to ensure it's still valid.
+ */
     useEffect(() => {
         if (!authState.sessionChecked || !authState.jwtToken) return;
 
@@ -144,7 +169,10 @@ export function useAuthSession(backendUrl) {
 
         validateSession();
     }, [authState.jwtToken, backendUrl, authState.sessionChecked, setAuthStateProperty]);
-
+/**
+ * Validate the JWT token by decoding it and checking its expiration.
+ * If invalid, notify the user to log in again.
+ */
     useEffect(() => {
         if (!authState.sessionChecked || !authState.jwtToken) return;
 

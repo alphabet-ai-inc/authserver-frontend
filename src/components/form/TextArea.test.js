@@ -2,17 +2,18 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { TextArea } from './TextArea';
 
 describe('TextArea', () => {
-  test('renders with label and value', () => {
+  test('renders with value only', () => {
     render(
       <TextArea
+        label="Description"
+        id="description"
         name="description"
         title="Description"
-        id="description"
         className="custom-class"
-        value="Initial text"
-        onChange={() => {}}
         rows={4}
         placeholder="Enter description"
+        value="Initial text"
+        onChange={() => {}}
         errorDiv="error-div"
         errorMsg=""
       />

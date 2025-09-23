@@ -1,9 +1,23 @@
+/**
+ * Apps Component
+ * --------------
+ * Displays a list of applications fetched from the backend.
+ * - Redirects to /login if not authenticated.
+ * - Shows a table of apps with details and links to each app's detail page.
+ * - Provides a button to add a new app.
+ *
+ * Dependencies:
+ * - React Router (Link, useNavigate)
+ * - AuthContext (for JWT token)
+ * - Bootstrap and Bootstrap Icons for styling
+ *
+ * @component
+ */
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { NavBar } from "./NavBar";
-// import "../style/Read.css";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const Apps = () => {
     const { jwtToken } = useAuth();
@@ -21,6 +35,11 @@ const Apps = () => {
         { id: "G", value: "3.0.1" },
         { id: "H", value: "4.1.0" },
     ];
+    /**
+     * Finds the index of a release option by its ID.
+     * @param {string} id - The release option ID.
+     * @returns {number} The index in the releaseOptions array.
+     */
 
     function getIndex(id) {
         try {
@@ -36,6 +55,12 @@ const Apps = () => {
             navigate("/login");
             return
         }
+        /**
+         * Fetches the list of apps from the backend API.
+         * Uses the JWT token for authorization.
+         * On success, updates the apps state with the fetched data.
+         * On failure, logs the error to the console.
+         */
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
         headers.append("Authorization", "Bearer " + jwtToken);
@@ -57,6 +82,9 @@ const Apps = () => {
 
     return (
         <>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></link>
+
             <NavBar />
             <div className="list-container">
                 <h2 style={{ display: "block", textAlign: "center" }}>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { AuthProvider, useAuth } from './AuthContext';
 
@@ -18,7 +17,11 @@ function TestComponent() {
     </div>
   );
 }
-
+/**/
+/**
+ * Test suite for AuthContext. It verifies that the AuthProvider correctly provides
+ * authentication context values to its children components.
+ */
 describe('AuthContext', () => {
   beforeEach(() => {
     useAuthSession.mockReturnValue({

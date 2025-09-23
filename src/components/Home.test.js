@@ -6,7 +6,10 @@ jest.mock('../images/switch1.jpeg', () => 'mock-image.jpg');
 jest.mock('../utils/Alert', () => ({
     Alert: ({ message, className }) => <div data-testid="alert" className={className}>{message}</div>
 }));
-
+/**
+ * Mock useNavigate from react-router-dom
+ * to test navigation without actual routing.
+ */
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
     useNavigate: () => mockNavigate,
@@ -20,6 +23,7 @@ const mockAuthSession = {
     toggleRefresh: jest.fn(),
 };
 
+// Mock useAuthSession hook
 jest.mock('../hooks/useAuthSession', () => ({
     useAuthSession: () => mockAuthSession,
 }));

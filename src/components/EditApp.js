@@ -6,10 +6,19 @@ import { TextArea } from "./form/TextArea";
 import Swal from "sweetalert2";
 import { useHandleDelete } from "../utils/HandleDel";
 import { useAuth } from "../context/AuthContext";
-import "../style/Edit.css";
 import { formatUnixTimestamp } from "../utils/Unix2Ymd";
 import { NavBar } from "./NavBar";
 
+/**
+ * EditApp displays a form to edit or create an application.
+ * It fetches app data if editing an existing app and handles form submission.
+ * It also includes validation and error handling.
+ * It uses Bootstrap for styling and SweetAlert2 for alerts.
+ * It creates a new app if the id param is 0. In this case it is not necessary to fetch data from the backend.
+ * 
+ * @component
+ * @returns 
+ */
 const EditApp = () => {
     const { jwtToken, sessionChecked } = useAuth();
 
@@ -29,7 +38,9 @@ const EditApp = () => {
         created: "",
         updated: "",
     });
-
+/**
+ * Options for the release select dropdown. Perhaps these should be fetched from the backend in the future.
+ */
     const releaseOptions = [
         { id: "A", value: "1.0.0" },
         { id: "B", value: "1.0.1" },
@@ -40,7 +51,12 @@ const EditApp = () => {
         { id: "G", value: "3.0.1" },
         { id: "H", value: "4.1.0" },
     ];
-
+/**
+ * Fetches app data when editing an existing app (appId !== 0).
+ * Initializes form for creating a new app if appId is 0.
+ * Validates session and token before fetching.
+ * Displays alerts and navigates to login if session or token is invalid.
+ */
     useEffect(() => {
         if (!sessionChecked) return; // Wait for session check to complete
         if (!jwtToken) {
@@ -109,6 +125,12 @@ const EditApp = () => {
         fetchData();
     }, [appId, navigate, jwtToken, sessionChecked]);
 
+    /**
+     * 
+     * @returns {boolean} True if the form is valid, false otherwise.
+     * This function checks that all required fields are filled.
+     * In the future, more complex validation rules can be added here.
+     */
     const validateForm = () => {
         const newErrors = {};
 
@@ -242,10 +264,6 @@ const EditApp = () => {
 
     const handleDelete = useHandleDelete(thisapp.id, jwtToken);
 
-    const dismissAlert = () => {
-        setError(null);
-    };
-
     if (error) {
         Swal.fire({
             title: 'Error!',
@@ -255,141 +273,133 @@ const EditApp = () => {
         });
     }
 
+    /**
+     * the form is only shown when the session is checked and valid
+     * and the token is valid. Otherwise, the user is redirected to login.
+     * If the appId is 0, the form is shown for creating a new app.
+     * It uses form components from the form folder.
+     * Props are passed down to the form components as needed.
+     * It is necessary that the form components show all the props passed to them. If not, the form component will not work properly.
+     * ie it is possible to have an Input here without placeholder, but the Input component must have a placeholder prop (even if empty) to avoid React warnings.
+    */
     return (
         <>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></link>
+
             <NavBar />
-            <div className="edit-container">
-                <form className="edit-app-form" onSubmit={handleSubmit}>
-                    <h2>{appId === 0 ? 'Add App' : 'Edit App'}</h2>
-                    <hr />
+            <div className="container py-4">
+                <h2 className="mb-4"><i className="bi bi-pencil-square me-2"></i>{appId === 0 ? 'Add App' : 'Edit App'}</h2>
+                <form onSubmit={handleSubmit}>
                     <input type="hidden" name="id" value={thisapp.id} readOnly />
-                    <div className="form-group">
-                        <label htmlFor="appName">App Name</label>
-                        <Input
-                            id={"appName"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"name"}
-                            placeholder="Enter app name"
-                            value={thisapp.name}
-                            onChange={handleChange}
-                            errorMsg={errors.name}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="appRelease">App Release</label>
-                        <Select
-                            id={"appRelease"}
-                            name={"release"}
-                            className={"form-select"}
-                            options={releaseOptions}
-                            value={thisapp.release}
-                            onChange={handleChange}
-                            errorMsg={errors.release}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="appPath">App Path</label>
-                        <Input
-                            id={"appPath"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"path"}
-                            placeholder="Enter app path"
-                            value={thisapp.path}
-                            onChange={handleChange}
-                            errorMsg={errors.path}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="appInit">App Init</label>
-                        <Input
-                            id={"appInit"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"init"}
-                            placeholder="Enter app init"
-                            value={thisapp.init}
-                            onChange={handleChange}
-                            errorMsg={errors.init}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="appWeb">App Web</label>
-                        <Input
-                            id={"appWeb"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"web"}
-                            placeholder="Enter app web"
-                            value={thisapp.web}
-                            onChange={handleChange}
-                            errorMsg={errors.web}
-                        />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="appTitle">App Title</label>
-                        <TextArea
-                            id={"appTitle"}
-                            name={"title"}
-                            className={"form-control"}
-                            type={"textarea"}
-                            placeholder="Enter app title"
-                            value={thisapp.title}
-                            onChange={handleChange}
-                            errorMsg={errors.title}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="appCreated">App Created</label>
-                        <Input
-                            id={"appCreated"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"created"}
-                            placeholder="Created is auto-generated"
-                            value={
-                                thisapp.created
-                                    ? formatUnixTimestamp(thisapp.created)
-                                    : "Not yet created"
-                            }
-                            readOnly={true}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="appUpdated">App Updated</label>
-                        <Input
-                            id={"appUpdated"}
-                            className={"form-control"}
-                            type={"text"}
-                            name={"updated"}
-                            placeholder="Updated is auto-generated"
-                            value={
-                                thisapp.updated
-                                    ? formatUnixTimestamp(thisapp.updated)
-                                    : "Not yet updated"
-                            }
-                            readOnly={true}
-                        />
-                    </div>
-                    <hr />
-                    <div className="form-action">
-                        <button className="btn btn-primary" type="submit">save</button>
+                    <Input
+                        label={"App Name"}
+                        id={"appName"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"name"}
+                        placeholder="Enter app name"
+                        value={thisapp.name}
+                        onChange={handleChange}
+                        errorMsg={errors.name}
+                    />
+                    <Select
+                        label={"App Release"}
+                        id={"appRelease"}
+                        name={"release"}
+                        className={"form-select"}
+                        options={releaseOptions}
+                        value={thisapp.release}
+                        onChange={handleChange}
+                        errorMsg={errors.release}
+                    />
+                    <Input
+                        label={"App Path"}
+                        id={"appPath"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"path"}
+                        placeholder="Enter app path"
+                        value={thisapp.path}
+                        onChange={handleChange}
+                        errorMsg={errors.path}
+                    />
+                    <Input
+                        label={"App Init"}
+                        id={"appInit"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"init"}
+                        placeholder="Enter app init"
+                        value={thisapp.init}
+                        onChange={handleChange}
+                        errorMsg={errors.init}
+                    />
+                    <Input
+                        label={"App Web"}
+                        id={"appWeb"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"web"}
+                        placeholder="Enter app web"
+                        value={thisapp.web}
+                        onChange={handleChange}
+                        errorMsg={errors.web}
+                    />
+                    <TextArea   
+                        label={"App Title"}
+                        id={"appTitle"}
+                        name={"title"}
+                        title={"App Title"}
+                        className={"form-control"}
+                        type={"textarea"}
+                        rows={3}
+                        placeholder="Enter app title"
+                        value={thisapp.title}
+                        onChange={handleChange}
+                        errorDiv={"text-danger"}
+                        errorMsg={errors.title}
+                    />
+                    <Input
+                        label={"Created"}
+                        id={"appCreated"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"created"}
+                        placeholder="Created is auto-generated"
+                        value={
+                            thisapp.created
+                                ? formatUnixTimestamp(thisapp.created)
+                                : "Not yet created"
+                        }
+                        readOnly={true}
+                    />
+                    <Input
+                        label={"Updated"}
+                        id={"appUpdated"}
+                        className={"form-control"}
+                        type={"text"}
+                        name={"updated"}
+                        placeholder="Updated is auto-generated"
+                        value={
+                            thisapp.updated
+                                ? formatUnixTimestamp(thisapp.updated)
+                                : "Not yet updated"
+                        }
+                        readOnly={true}
+                    />
+                    <div className="d-flex gap-2">
+                        <button className="btn btn-success" type="submit">
+                            <i className="bi bi-save"></i> Save
+                        </button>
                         {thisapp.id > 0 && (
-                            <button type="button" className="btn btn-danger ms-2" onClick={handleDelete}>
-                                Delete App
+                            <button type="button" className="btn btn-secondary" onClick={handleDelete}>
+                                <i className="bi bi-arrow-left me-1"></i> Delete
                             </button>
 
                         )}
                     </div>
 
-                    <div className="form-alert hidden" id="formAlert">
-                        <p>Error! Please check your inputs.</p>
-                        <button onClick={dismissAlert}>OK</button>
-                    </div>
                 </form>
             </div>
         </>

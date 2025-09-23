@@ -10,6 +10,7 @@ describe('Select', () => {
   test('renders with label and options', () => {
     render(
       <Select
+        label="Test Select"
         name="testSelect"
         title="Test Select"
         id="testSelect"
@@ -32,6 +33,7 @@ describe('Select', () => {
     const handleChange = jest.fn();
     render(
       <Select
+        label="Test Select"
         name="testSelect"
         title="Test Select"
         id="testSelect"

@@ -1,8 +1,24 @@
+/** 
+ * Apps Component Test
+ * --------------------
+ * Tests the functionality of the Apps component.
+ *
+ * Dependencies:
+ * - React Testing Library
+ * - Mock Service Worker (MSW) for API mocking
+ *
+ * @component
+ */
 import { render, screen, waitFor } from '@testing-library/react';
 import { Apps } from './Apps';
 import { MemoryRouter } from 'react-router-dom';
 
-// Mock useAuth
+/** 
+ * Mock useAuth
+ * gives control over the jwtToken value for testing different scenarios.
+ * mockJwtToken variable can be set in each test to simulate logged-in or logged-out states.
+ */
+
 let mockJwtToken = 'test-token';
 
 jest.mock('../context/AuthContext', () => ({
@@ -11,12 +27,17 @@ jest.mock('../context/AuthContext', () => ({
   }),
 }));
 
-// Mock NavBar
+/**
+ * Mock NavBar component to avoid rendering the actual NavBar during tests.
+ * This prevents potential side effects and focuses tests on the Apps component.
+ */
 jest.mock('./NavBar', () => ({
   NavBar: () => <div data-testid="navbar" />,
 }));
 
-// Mock useNavigate
+/**
+ * Mocks the useNavigate hook from react-router-dom to track navigation calls.
+ */
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -24,6 +45,12 @@ jest.mock('react-router-dom', () => ({
   Link: ({ to, children, ...props }) => <a href={to} {...props}>{children}</a>,
 }));
 
+/**
+ * Sets up a global fetch mock to simulate API responses.
+ * The mock returns a predefined list of apps for testing purposes.
+ * This is done before each test to ensure a consistent testing environment.
+ * The mock is restored after each test to avoid interference with other tests.
+ */
 beforeEach(() => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
@@ -45,6 +72,13 @@ beforeEach(() => {
 afterEach(() => {
   global.fetch.mockRestore();
 });
+
+/** Test Suite for Apps Component
+ * -----------------------------
+ * Contains tests to verify the rendering and functionality of the Apps component.
+ * Tests include rendering the component, displaying fetched data, and handling navigation based on authentication state.
+ * Each test is isolated to ensure reliability and accuracy of results.
+ */
 
 describe('Apps', () => {
   beforeEach(() => {

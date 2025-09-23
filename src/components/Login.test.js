@@ -22,7 +22,10 @@ describe('Login', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-
+/**
+ * test to ensure the Login component renders correctly
+ * and handles user interactions as expected.
+ */
   test('renders login form', () => {
     render(<Login />, { wrapper: MemoryRouter });
     expect(screen.getByTestId(/loginform/i)).toBeInTheDocument();

@@ -5,8 +5,14 @@ import { useHandleDelete } from "../utils/HandleDel";
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { NavBar } from "./NavBar";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
+/**
+ * 
+ * @returns {JSX.Element} ThisApp component displaying details of a specific app.
+ * Fetches app data from the backend using the app ID from URL parameters.
+ * Displays app details and provides options to edit or delete the app.
+ * Handles session validation and redirects to login if the JWT token is invalid.
+ */
 const ThisApp = () => {
     const {
         jwtToken,
@@ -19,6 +25,13 @@ const ThisApp = () => {
     const [alertClassName, setAlertClassName] = useState("d-none");
     const [alertMessage, setAlertMessage] = useState("");
     const [ThisApp, setThisApp] = useState({}); // <-- Add this line
+
+    /**
+     * List of release options for the app.
+     * Each option has an ID and a corresponding version value.
+     * This is used to display the release version based on the app's release ID.
+     * Future improvements could include fetching this list from the backend.
+     */
     const releaseOptions = [
         { id: "A", value: "1.0.0" },
         { id: "B", value: "1.0.1" },
@@ -53,9 +66,15 @@ const ThisApp = () => {
             handleDelete(); // Call the function returned by the hook
         }
     };
-
+/**
+ * Effect to fetch app details when the component mounts or when the ID or JWT token changes.
+ * Validates the JWT token and redirects to login if invalid.
+ * Updates the component state with the fetched app data.
+ * In the future, user validation, checking session expiration, and handling token refresh could be more robust.
+ * @dependency id - The app ID from URL parameters.
+ * @dependency jwtToken - The JWT token for authentication.
+ */
     useEffect(() => {
-        // if (!sessionChecked) return; // Wait for session check to complete
 
         if (!jwtToken) {
             Swal.fire({
@@ -95,37 +114,47 @@ const ThisApp = () => {
 
     return (
         <>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></link>
+
             <NavBar />
-            <div class="card mb-3 shadow-sm ">
+            <div className="card mb-3 shadow-sm ">
                 <div className="card-body">
                     <div className={`alert ${alertClassName}`} role="alert">
                         {alertMessage}
                     </div>
 
                     <h5 className="card-title">
-                        <i class="bi bi-box-seam me-2"></i> {ThisApp.title}
+                        <i className="bi bi-box-seam me-2"></i> {ThisApp.title}
                     </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        <i class="bi bi-tag-fill me-1"></i> Release: {ThisApp.release ? releaseOptions[getIndex(ThisApp.release)].value : ThisApp.release}
+                    <h6 className="card-subtitle mb-2 text-muted">
+                        <i className="bi bi-tag-fill me-1"></i> Release: {
+                            (() => {
+                                const idx = getIndex(ThisApp.release);
+                                return idx !== -1 && releaseOptions[idx]
+                                    ? releaseOptions[idx].value
+                                    : ThisApp.release || '';
+                            })()
+                        }
                     </h6>
                     <p className="card-text">
-                        <i class="bi bi-file-earmark-text me-1"></i><strong>Name: </strong>{ThisApp.name}<br />
-                        <i class="bi bi-hash me-1"></i><strong>ID: </strong>{ThisApp.id}<br />
-                        <i class="bi bi-calendar-plus me-1"></i><strong>Created: </strong>{formatUnixTimestamp(ThisApp.created)}<br />
-                        <i class="bi bi-calendar-check me-1"></i><strong>Updated: </strong>{formatUnixTimestamp(ThisApp.updated)}<br />
-                        <i class="bi bi-file-earmark-code me-1"></i><strong>Init: </strong>{ThisApp.init}<br />
-                        <i class="bi bi-folder2-open me-1"></i><strong>Path: </strong>{ThisApp.path}<br />
-                        <i class="bi bi-globe me-1"></i><strong>Web: </strong>{ThisApp.web}
+                        <i className="bi bi-file-earmark-text me-1"></i><strong>Name: </strong>{ThisApp.name}<br />
+                        <i className="bi bi-hash me-1"></i><strong>ID: </strong>{ThisApp.id}<br />
+                        <i className="bi bi-calendar-plus me-1"></i><strong>Created: </strong>{formatUnixTimestamp(ThisApp.created)}<br />
+                        <i className="bi bi-calendar-check me-1"></i><strong>Updated: </strong>{formatUnixTimestamp(ThisApp.updated)}<br />
+                        <i className="bi bi-file-earmark-code me-1"></i><strong>Init: </strong>{ThisApp.init}<br />
+                        <i className="bi bi-folder2-open me-1"></i><strong>Path: </strong>{ThisApp.path}<br />
+                        <i className="bi bi-globe me-1"></i><strong>Web: </strong>{ThisApp.web}
                     </p>
-                    <div class="d-flex gap-2">
+                    <div className="d-flex gap-2">
                         <button className="btn btn-primary" onClick={handleClick("edit")}>
                             <i className="bi bi-pencil-square me-1" style={{ marginRight: 8 }}></i>
-                                Edit App
+                            Edit App
                         </button>
                         {ThisApp.id > 0 &&
                             <a href="#!" className="btn btn-danger" onClick={handleClick("delete")}>
                                 <i className="bi bi-trash me-1" style={{ marginRight: 8 }}></i>
-                                    Delete App
+                                Delete App
                             </a>
                         }
                     </div>

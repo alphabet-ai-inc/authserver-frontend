@@ -28,9 +28,9 @@ beforeEach(() => {
     Promise.resolve({
       json: () => Promise.resolve({
         id: 1,
-        title: 'Test App',
+        title: 'test app',
         created: 1234567890,
-        name: 'Test Name',
+        name: 'prueba', //be careful with this name, ie 'test' is in multiple places
         init: 'init',
         path: '/test',
         release: '1.0.0',
@@ -47,6 +47,6 @@ afterEach(() => {
 
 test('renders ThisApp with fetched data', async () => {
   render(<ThisApp />, { wrapper: MemoryRouter });
-  expect(await screen.findByText(/Test App/)).toBeInTheDocument();
-  expect(screen.getByText(/Test Name/)).toBeInTheDocument();
+  expect(await screen.findByText(/test app/i)).toBeInTheDocument();
+  expect(screen.getByText(/prueba/i)).toBeInTheDocument();
 });
