@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { NavBar } from "./NavBar";
 
 /**
- * 
+ *
  * @returns {JSX.Element} ThisApp component displaying details of a specific app.
  * Fetches app data from the backend using the app ID from URL parameters.
  * Displays app details and provides options to edit or delete the app.
@@ -32,25 +32,25 @@ const ThisApp = () => {
      * This is used to display the release version based on the app's release ID.
      * Future improvements could include fetching this list from the backend.
      */
-    const releaseOptions = [
-        { id: "A", value: "1.0.0" },
-        { id: "B", value: "1.0.1" },
-        { id: "C", value: "1.0.2" },
-        { id: "D", value: "1.1.0" },
-        { id: "E", value: "1.2.0" },
-        { id: "F", value: "2" },
-        { id: "G", value: "3.0.1" },
-        { id: "H", value: "4.1.0" },
-    ];
+    // const releaseOptions = [
+    //     { id: "A", value: "1.0.0" },
+    //     { id: "B", value: "1.0.1" },
+    //     { id: "C", value: "1.0.2" },
+    //     { id: "D", value: "1.1.0" },
+    //     { id: "E", value: "1.2.0" },
+    //     { id: "F", value: "2" },
+    //     { id: "G", value: "3.0.1" },
+    //     { id: "H", value: "4.1.0" },
+    // ];
 
-    function getIndex(id) {
-        try {
-            return releaseOptions.findIndex(o => o.id === id);
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
+    // function getIndex(id) {
+    //     try {
+    //         return releaseOptions.findIndex(o => o.id === id);
+    //     }
+    //     catch (e) {
+    //         console.log(e);
+    //     }
+    // }
 
     const handleEdit = () => {
         navigate(`/editapp/${id}`);
@@ -128,14 +128,15 @@ const ThisApp = () => {
                         <i className="bi bi-box-seam me-2"></i> {ThisApp.title}
                     </h5>
                     <h6 className="card-subtitle mb-2 text-muted">
-                        <i className="bi bi-tag-fill me-1"></i> Release: {
+                        <i className="bi bi-tag-fill me-1"></i> Release: {ThisApp.release}
+                        {/* {
                             (() => {
                                 const idx = getIndex(ThisApp.release);
                                 return idx !== -1 && releaseOptions[idx]
                                     ? releaseOptions[idx].value
                                     : ThisApp.release || '';
                             })()
-                        }
+                        } */}
                     </h6>
                     <p className="card-text">
                         <i className="bi bi-file-earmark-text me-1"></i><strong>Name: </strong>{ThisApp.name}<br />

@@ -18,7 +18,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { NavBar } from "./NavBar";
-
+// Uncomment the following line if ArrayFieldRenderer is needed
+// import { ArrayFieldRenderer } from "../utils/ArrayHandler";
 const Apps = () => {
     const { jwtToken } = useAuth();
 
@@ -61,6 +62,7 @@ const Apps = () => {
          * On success, updates the apps state with the fetched data.
          * On failure, logs the error to the console.
          */
+    // Helper to transform fields: join arrays to strings, leave others as-is
         const headers = new Headers();
         headers.append("Content-Type", "application/json");
         headers.append("Authorization", "Bearer " + jwtToken);
@@ -70,16 +72,27 @@ const Apps = () => {
             headers: headers,
         }
 
+// ...existing code...
+
+// ...existing code...
+
         fetch(`${process.env.REACT_APP_BACKEND_URL}/apps`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                setApps(data);
+                if (Array.isArray(data)) {
+                    // data is an array of app rows; filter to display only certain columns
+                    setApps(data);
+                    console.log("Apps with all the fields: ", data);
+                } else {
+                    console.log('Unexpected data format (expected array of apps):', data);
+                    setApps([]);  // Fallback
+                }
             })
             .catch(err => {
                 console.log(err);
-            })
+                setApps([]);
+            });
     }, [jwtToken, navigate]);
-
     return (
         <>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></link>
@@ -112,14 +125,19 @@ const Apps = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {apps.map((m) => (
+                        {apps?.map?.((m) => (
                             <tr key={m.id}>
                                 <td>
                                     <Link to={`/thisapp/${m.id}`}>
                                         {m.name}
                                     </Link>
                                 </td>
-                                <td>{m.release ? releaseOptions[getIndex(m.release)].value : m.release}</td>
+                                <td>
+                                    {(() => {
+                                        const index = getIndex(m.release);
+                                        return index !== -1 ? releaseOptions[index].value : m.release;
+                                    })()}
+                                </td>
                                 <td>{m.path}</td>
                                 <td>{m.init}</td>
                                 <td>{m.web}</td>

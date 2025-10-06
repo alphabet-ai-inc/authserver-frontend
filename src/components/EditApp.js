@@ -8,6 +8,7 @@ import { useHandleDelete } from "../utils/HandleDel";
 import { useAuth } from "../context/AuthContext";
 import { formatUnixTimestamp } from "../utils/Unix2Ymd";
 import { NavBar } from "./NavBar";
+import { useMemo } from "react";
 
 /**
  * EditApp displays a form to edit or create an application.
@@ -15,11 +16,14 @@ import { NavBar } from "./NavBar";
  * It also includes validation and error handling.
  * It uses Bootstrap for styling and SweetAlert2 for alerts.
  * It creates a new app if the id param is 0. In this case it is not necessary to fetch data from the backend.
- * 
+ *
  * @component
- * @returns 
+ * @returns
  */
+
+
 const EditApp = () => {
+
     const { jwtToken, sessionChecked } = useAuth();
 
     const navigate = useNavigate();
@@ -27,7 +31,26 @@ const EditApp = () => {
     const appId = parseInt(id || "0", 10);
     const [error, setError] = useState(null);
     const [errors, setErrors] = useState({}); // Initialize as an empty object
-    const [thisapp, setThisapp] = useState({
+    // const [thisapp, setThisapp] = useState({
+    //     id: 0,
+    //     name: "",
+    //     release: "",
+    //     path: "",
+    //     init: "",
+    //     web: "",
+    //     title: "",
+    //     created: "",
+    //     updated: "",
+    // });
+    /**
+ * App model defining all possible fields. Used for initializing new apps and ensuring consistency.
+ * Fields not used in the form can be included for future expansion or backend compatibility.
+ */
+
+/**
+ * Options for the release select dropdown. Perhaps these should be fetched from the backend in the future.
+ */
+    const appModel = useMemo(() => ({
         id: 0,
         name: "",
         release: "",
@@ -35,23 +58,81 @@ const EditApp = () => {
         init: "",
         web: "",
         title: "",
-        created: "",
-        updated: "",
-    });
-/**
- * Options for the release select dropdown. Perhaps these should be fetched from the backend in the future.
- */
-    const releaseOptions = [
-        { id: "A", value: "1.0.0" },
-        { id: "B", value: "1.0.1" },
-        { id: "C", value: "1.0.2" },
-        { id: "D", value: "1.1.0" },
-        { id: "E", value: "1.2.0" },
-        { id: "F", value: "2" },
-        { id: "G", value: "3.0.1" },
-        { id: "H", value: "4.1.0" },
-    ];
-/**
+        created: 0,
+        updated: 0,
+        description: "",
+        positioningStmt: "",
+        logo: "",
+        category: "",
+        platform: [],
+        developer: "",
+        licenseType: "",
+        size: 0,
+        compatibility: [],
+        integrationCapabilities: [],
+        developmentStack: [],
+        apiDocumentation: "",
+        securityFeatures: [],
+        regulatoryCompliance: [],
+        revenueStreams: [],
+        customerSegments: [],
+        channels: [],
+        valueProposition: "",
+        pricingTiers: [],
+        partnerships: [],
+        costStructure: [],
+        customerRelationships: [],
+        unfairAdvantage: "",
+        roadmap: "",
+        versionControl: "",
+        errorRate: 0,
+        averageResponseTime: 0,
+        uptimePercentage: 0,
+        keyActivities: [],
+        activeUsers: 0,
+        userRetentionRate: 0,
+        userAcquisitionCost: 0,
+        churnRate: 0,
+        monthlyRecurringRevenue: 0,
+        userFeedback: [],
+        backupRecoveryOptions: [],
+        localizationSupport: [],
+        accessibilityFeatures: [],
+        teamStructure: [],
+        dataBackupLocation: "",
+        environmentalImpact: "",
+        socialImpact: "",
+        intellectualProperty: [],
+        fundingsInvestment: 0,
+        exitStrategy: "",
+        analyticsTools: [],
+        keyMetrics: [],
+        url: "",
+        landingPage: "",
+    }), []);
+    const [thisapp, setThisapp] = useState({ ...appModel });
+
+    // const releaseOptions = [
+    //     { id: "A", value: "1.0.0" },
+    //     { id: "B", value: "1.0.1" },
+    //     { id: "C", value: "1.0.2" },
+    //     { id: "D", value: "1.1.0" },
+    //     { id: "E", value: "1.2.0" },
+    //     { id: "F", value: "2" },
+    //     { id: "G", value: "3.0.1" },
+    //     { id: "H", value: "4.1.0" },
+    // ];
+
+    const [releaseOptions, setReleaseOptions] = useState([]);
+    // In useEffect, add a fetch for options
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/releases`, { headers: { Authorization: `Bearer ${jwtToken}` } })
+            .then(res => res.json())
+            .then(data => setReleaseOptions(data));  // Assuming backend returns [{ id: "1.0.0", value: "1.0.0" }, ...]
+
+    }, [jwtToken]);
+
+ /**
  * Fetches app data when editing an existing app (appId !== 0).
  * Initializes form for creating a new app if appId is 0.
  * Validates session and token before fetching.
@@ -104,17 +185,7 @@ const EditApp = () => {
                     setThisapp(data); // Assuming the backend returns the app data directly
                 } else {
                     // Initialize for a new app
-                    setThisapp({
-                        id: 0,
-                        name: "",
-                        release: "",
-                        path: "",
-                        init: "",
-                        web: "",
-                        title: "",
-                        created: "",
-                        updated: "",
-                    });
+                    setThisapp({ ...appModel });
                 }
             } catch (err) {
                 console.error("Error fetching app data:", err);
@@ -123,10 +194,10 @@ const EditApp = () => {
         };
 
         fetchData();
-    }, [appId, navigate, jwtToken, sessionChecked]);
+    }, [appId, navigate, jwtToken, sessionChecked, appModel]);
 
     /**
-     * 
+     *
      * @returns {boolean} True if the form is valid, false otherwise.
      * This function checks that all required fields are filled.
      * In the future, more complex validation rules can be added here.
@@ -346,7 +417,7 @@ const EditApp = () => {
                         onChange={handleChange}
                         errorMsg={errors.web}
                     />
-                    <TextArea   
+                    <TextArea
                         label={"App Title"}
                         id={"appTitle"}
                         name={"title"}

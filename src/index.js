@@ -15,12 +15,12 @@ import { Regions } from './components/Regions';
 import { Biometrics } from './components/Biometrics';
 import { Login } from './components/Login';
 // import Logout from './components/Logout';
-import { ThisApp } from './components/ThisApp';
+import { ThisApp } from './components/ThisAppNew';
 // import ManageCatalogue from './components/ManageCatalogue';
 import { EditApp } from './components/EditApp';
 import { AuthProvider } from "./context/AuthContext";
 
-// Override console.error to ignore websocket errors. 
+// Override console.error to ignore websocket errors.
 // websocket is important in continuous operation, so we don't want to log these errors.
 // for instance, chat applications rely on websockets for real-time communication
 const originalError = console.error;

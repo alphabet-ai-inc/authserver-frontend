@@ -1,4 +1,4 @@
-/** 
+/**
  * Apps Component Test
  * --------------------
  * Tests the functionality of the Apps component.
@@ -9,11 +9,11 @@
  *
  * @component
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Apps } from './Apps';
 import { MemoryRouter } from 'react-router-dom';
 
-/** 
+/**
  * Mock useAuth
  * gives control over the jwtToken value for testing different scenarios.
  * mockJwtToken variable can be set in each test to simulate logged-in or logged-out states.
@@ -110,26 +110,25 @@ describe('Apps', () => {
     expect(screen.getByText(/apps/i)).toBeInTheDocument();
     expect(screen.getByRole('table')).toBeInTheDocument();
 
-    // Wait for the fetched data to appear
-    await waitFor(() => {
-      expect(screen.getByText('App1')).toBeInTheDocument();
-      expect(screen.getByText('1.0.0')).toBeInTheDocument(); // release value for 'A'
-      expect(screen.getByText('/app1')).toBeInTheDocument();
-      expect(screen.getByText('init1')).toBeInTheDocument();
-      expect(screen.getByText('web1')).toBeInTheDocument();
-      expect(screen.getByText('Title1')).toBeInTheDocument();
-    });
+    // Wait for each fetched data element separately
+    expect(await screen.findByText('App1')).toBeInTheDocument();
+    expect(await screen.findByText('1.0.0')).toBeInTheDocument();
+    expect(await screen.findByText('/app1')).toBeInTheDocument();
+    expect(await screen.findByText('init1')).toBeInTheDocument();
+    expect(await screen.findByText('web1')).toBeInTheDocument();
+    expect(await screen.findByText('Title1')).toBeInTheDocument();
 
     global.fetch.mockRestore();
   });
+    test('redirects to login if jwtToken is empty', () => {
+      mockJwtToken = '';
+      render(<Apps />, { wrapper: MemoryRouter });
+      expect(mockNavigate).toHaveBeenCalledWith('/login');
+    });
 
-  test('redirects to login if jwtToken is empty', () => {
-  mockJwtToken = '';
-  render(<Apps />, { wrapper: MemoryRouter });
-  expect(mockNavigate).toHaveBeenCalledWith('/login');
+    test('does not redirect if jwtToken is present', () => {
+      render(<Apps />, { wrapper: MemoryRouter });
+      expect(mockNavigate).not.toHaveBeenCalledWith('/login');
+    });
   });
 
-  test('does not redirect if jwtToken is present', () => {
-    render(<Apps />, { wrapper: MemoryRouter });
-    expect(mockNavigate).not.toHaveBeenCalledWith('/login');});
-});

@@ -71,9 +71,17 @@ test('renders EditApp form and loads app data', async () => {
   // Wait for the app name to be loaded into the input
   await waitFor(() => {
     expect(screen.getByDisplayValue('Test App')).toBeInTheDocument();
+  });
+  await waitFor(() => {
     expect(screen.getByDisplayValue('/test')).toBeInTheDocument();
+  });
+  await waitFor(() => {
     expect(screen.getByDisplayValue('init')).toBeInTheDocument();
+  });
+  await waitFor(() => {
     expect(screen.getByDisplayValue('https://example.com')).toBeInTheDocument();
+  });
+  await waitFor(() => {
     expect(screen.getByDisplayValue('Test Title')).toBeInTheDocument();
   });
 

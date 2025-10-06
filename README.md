@@ -69,18 +69,26 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-# Running Authserver-Front-End in container
-### Create docker network
+## Running Authserver-Front-End in container
+
+## Create docker network
+
 ```bash
     docker network create authserver-network || true
 ```
+
 ### Install first authserver (backend)
+
 in authserver (backend) directory run:
+
 ```bash
 docker compose up -d
 ```
-### Install front-end:
+
+### Install front-end
+
 in this directory run:
+
 ```bash
 docker compose up -d
 ```
