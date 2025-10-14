@@ -7,7 +7,7 @@ const Input = forwardRef((props, ref) => {
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"></link>
             <div className="mb-3">
                 <label htmlFor={props.name} className="form-label fw-bold text-secondary">
-                    {props.label}                
+                    {props.label}
                 </label>
                 <input
                     id={props.id}

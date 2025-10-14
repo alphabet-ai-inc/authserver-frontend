@@ -10,4 +10,16 @@ function formatUnixTimestamp(unixTime) {
 
   return `${yyyy}/${mm}/${dd} ${hh}:${min}:${ss}`;
 }
-export { formatUnixTimestamp };
+function dateToUnixBigInt(isoDate) {
+  if (!isoDate) return null;
+  const ms = Date.parse(isoDate);
+  if (Number.isNaN(ms)) throw new Error('Invalid date');
+  const seconds = Math.floor(ms / 1000);
+  /* eslint-disable no-undef */
+  if (typeof BigInt === 'function') {
+    return BigInt(seconds);
+  }
+  return seconds;
+}
+
+export { formatUnixTimestamp, dateToUnixBigInt };

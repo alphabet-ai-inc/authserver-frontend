@@ -82,7 +82,7 @@ const Apps = () => {
                 if (Array.isArray(data)) {
                     // data is an array of app rows; filter to display only certain columns
                     setApps(data);
-                    console.log("Apps with all the fields: ", data);
+                    // console.log("Apps with all the fields: ", data);
                 } else {
                     console.log('Unexpected data format (expected array of apps):', data);
                     setApps([]);  // Fallback

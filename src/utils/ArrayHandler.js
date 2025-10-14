@@ -1,19 +1,11 @@
-import React from 'react';
+export function stringArrayToTextareaValue(arr) {
+  return Array.isArray(arr) ? arr.join('\n') : '';
+}
 
-/**
- * Renders an array of strings as a comma-separated list.
- * Handles null, undefined, or non-array inputs gracefully.
- *
- * @param {Object} props
- * @param {string[]} props.value - The array to render
- * @param {string} [props.emptyText="—"] - Text to show if value is empty or invalid
- */
-const ArrayFieldRenderer = ({ value, emptyText = "—" }) => {
-  if (!Array.isArray(value) || value.length === 0) {
-    return <span>{emptyText}</span>;
+export function textareaValueToStringArray(value) {
+  const lines = value.split('\n').map(line => line.trim()).filter(Boolean);
+  if (!lines.every(line => /^[^\r\n]+$/.test(line))) {
+    throw new Error('This field must be plain text lines without control characters.');
   }
-
-  return <span>{value.join(', ')}</span>;
-};
-
-export default ArrayFieldRenderer;
+  return lines;
+}

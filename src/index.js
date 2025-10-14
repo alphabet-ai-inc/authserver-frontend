@@ -15,7 +15,7 @@ import { Regions } from './components/Regions';
 import { Biometrics } from './components/Biometrics';
 import { Login } from './components/Login';
 // import Logout from './components/Logout';
-import { ThisApp } from './components/ThisAppNew';
+import { ThisApp } from './components/ThisApp';
 // import ManageCatalogue from './components/ManageCatalogue';
 import { EditApp } from './components/EditApp';
 import { AuthProvider } from "./context/AuthContext";
