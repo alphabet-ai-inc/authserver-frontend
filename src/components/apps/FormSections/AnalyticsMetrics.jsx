@@ -9,67 +9,60 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
             </h4>
             <div className="row g-3">
                 <DynamicField
-                    name="activeUsers"
+                    name="active_users"
                     label="Active Users"
                     onChange={handleChange}
-                    value={formData.activeUsers}
-                    error={errors.activeUsers}
+                    value={formData.active_users}
+                    error={errors.active_users}
                     type="numeric"
                 />
                 <DynamicField
-                    name="userRetentionRate"
+                    name="user_retention_rate"
                     label="User Retention Rate"
                     onChange={handleChange}
-                    value={formData.userRetentionRate}
-                    error={errors.userRetentionRate}
+                    value={formData.user_retention_rate}
+                    error={errors.user_retention_rate}
                     type="numeric"
                 />
                 <DynamicField
-                    name="userAcquisitionCost"
+                    name="user_acquisition_cost"
                     label="User Acquisition Cost"
                     onChange={handleChange}
-                    value={formData.userAcquisitionCost}
-                    error={errors.userAcquisitionCost}
+                    value={formData.user_acquisition_cost}
+                    error={errors.user_acquisition_cost}
                     type="numeric"
                 />
                 <DynamicField
-                    name="churnRate"
+                    name="churn_rate"
                     label="Churn Rate"
                     onChange={handleChange}
-                    value={formData.churnRate}
-                    error={errors.churnRate}
+                    value={formData.churn_rate}
+                    error={errors.churn_rate}
                     type="numeric"
                 />
                 <DynamicField
-                    name="monthlyRecurringRevenue"
+                    name="monthly_recurring_revenue"
                     label="Monthly Recurring Revenue"
                     onChange={handleChange}
-                    value={formData.monthlyRecurringRevenue}
-                    error={errors.monthlyRecurringRevenue}
+                    value={formData.monthly_recurring_revenue}
+                    error={errors.monthly_recurring_revenue}
                     type="numeric"
                 />
+
                 <DynamicField
-                    name="pageviews"
-                    label="Page Views"
-                    onChange={handleChange}
-                    value={formData.pageviews}
-                    error={errors.pageviews}
-                    type="numeric"
-                />
-                <DynamicField
-                    name="userFeedback"
+                    name="user_feedback"
                     label="User Feedback Score"
                     onChange={handleChange}
-                    value={formData.userFeedback}
-                    error={errors.userFeedback}
+                    value={formData.user_feedback}
+                    error={errors.user_feedback}
                     type="numeric"
                 />
                 <DynamicField
-                    name="keyMetrics"
+                    name="key_metrics"
                     label="Key Metrics"
                     onChange={handleChange}
-                    value={formData.keyMetrics}
-                    error={errors.keyMetrics}
+                    value={formData.key_metrics}
+                    error={errors.key_metrics}
                     type="numeric"
                 />
             </div>

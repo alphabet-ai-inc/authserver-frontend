@@ -22,11 +22,11 @@ export const TechnicalSpecifications = ({
           />
 
           <DynamicField
-            name="integrationCapabilities"
+            name="integration_capabilities"
             multiple
-            value={formData.integrationCapabilities}
+            value={formData.integration_capabilities}
             onChange={handleChange}
-            error={errors.integrationCapabilities}
+            error={errors.integration_capabilities}
             options={{
               integrationCapabilities: ['Webhook', 'REST API', 'GraphQL'],
               // add other option arrays here
@@ -34,35 +34,35 @@ export const TechnicalSpecifications = ({
           />
 
           <DynamicField
-            name="developmentStack"
+            name="development_stack"
             type="tags"
-            value={formData.developmentStack}
+            value={formData.development_stack}
             onChange={handleChange}
-            error={errors.developmentStack}
+            error={errors.development_stack}
             suggestions={['React', 'Node.js', 'GO', 'Python', 'Java']}
           />
 
           <DynamicField
-            name="apiDocumentation"
-            value={formData.apiDocumentation}
+            name="api_documentation"
+            value={formData.api_documentation}
             onChange={handleChange}
-            error={errors.apiDocumentation}
+            error={errors.api_documentation}
           />
 
           <DynamicField
-            name="securityFeatures"
+            name="security_features"
             type="tags"
-            value={formData.securityFeatures}
+            value={formData.security_features}
             onChange={handleChange}
-            error={errors.securityFeatures}
+            error={errors.security_features}
           />
 
         <DynamicField
-            name="regulatoryCompliance"
+            name="regulatory_compliance"
             type="tags"
-            value={formData.regulatoryCompliance}
+            value={formData.regulatory_compliance}
             onChange={handleChange}
-            error={errors.regulatoryCompliance}
+            error={errors.regulatory_compliance}
           />
 
         <DynamicField

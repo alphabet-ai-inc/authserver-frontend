@@ -20,49 +20,49 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
                     rows={5}
                 />
                 <DynamicField
-                    name="versioncontrol"
+                    name="version_control"
                     label="Version Control"
                     onChange={handleChange}
-                    value={formData.versioncontrol}
-                    error={errors.versioncontrol}
+                    value={formData.version_control}
+                    error={errors.version_control}
                     colWidth={12}
                     type="textarea"
                     rows={5}
                 />
                 <DynamicField
-                    name="errorrate"
+                    name="error_rate"
                     label="Error Rate"
                     onChange={handleChange}
-                    value={formData.errorrate}
-                    error={errors.errorrate}
+                    value={formData.error_rate}
+                    error={errors.error_rate}
                     colWidth={12}
                     type="textarea"
                     rows={5}
                 />
                 <DynamicField
-                    name="averageresponsetime"
+                    name="average_response_time"
                     label="Average Response Time"
                     onChange={handleChange}
-                    value={formData.averageresponsetime}
-                    error={errors.averageresponsetime}
+                    value={formData.average_response_time}
+                    error={errors.average_response_time}
                     type="numeric"
                 />
 
                 <DynamicField
-                    name="uptime"
+                    name="uptime_percentage"
                     label="Uptime percentage"
                     onChange={handleChange}
-                    value={formData.uptimepercentage}
-                    error={errors.uptimepercentage}
+                    value={formData.uptime_percentage}
+                    error={errors.uptime_percentage}
                     type="numeric"
                 />
 
                 <DynamicField
-                    name="keyactivities"
+                    name="key_activities"
                     label="Key Activities"
                     onChange={handleChange}
-                    value={stringArrayToTextareaValue(formData.keyActivities)}
-                    error={errors.keyActivities}
+                    value={stringArrayToTextareaValue(formData.key_activities)}
+                    error={errors.key_activities}
                     colWidth={12}
                     type="textarea"
                     rows={5}

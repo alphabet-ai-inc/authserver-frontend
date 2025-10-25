@@ -16,7 +16,8 @@ const Login = () => {
         setJwtToken,
         setIsLoggedInExplicitly,
         toggleRefresh,
-        // logOut,
+        setJustLoggedIn,  // Add this from context
+
     } = useAuth();
 
     const [alertClassName, setAlertClassName] = useState("d-none");
@@ -54,10 +55,12 @@ const Login = () => {
                     setAlertClassName("alert-danger");
                     setAlertMessage(data.message);
                 } else {
+                    setJustLoggedIn(true);
                     setIsLoggedInExplicitly(true);
                     toggleRefresh(true);
                     setJwtToken(data.access_token);
                     navigate("/apps");
+                    setJustLoggedIn(false);
                 }
             })
             .catch(error => {

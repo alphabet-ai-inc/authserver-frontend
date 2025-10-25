@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import Swal from "sweetalert2";
-
+import { useRef } from "react";
 /**
  * Interval duration for token refresh in milliseconds.
  */
 const REFRESH_INTERVAL = 600000; // 10 minutes
 /**
- * 
- * @param {*} backendUrl 
+ *
+ * @param {*} backendUrl
  * @returns jwtToken, that is the JWT token string. This token is used for authenticating requests to the backend.
  * setJwtToken, that is a function to update the jwtToken state.
  * sessionChecked, that is a boolean indicating whether the session check has been completed.
@@ -17,10 +17,10 @@ const REFRESH_INTERVAL = 600000; // 10 minutes
  * logOut is a function to log out the user.
  * sessionValid, that is a boolean indicating whether the session is valid.
  * tokenValid, that is a boolean indicating whether the token is valid.
- * 
+ *
  * This hook manages authentication state, including token refresh, session validation,
  * and logout functionality. It uses the provided backendUrl to interact with the authentication backend.
- * 
+ *
  * In the future, consider splitting this hook into smaller, more focused hooks for better maintainability. Some times it will be necessary to use only the logout function
  * or the toggleRefresh function or the jwtToken state.
  */
@@ -147,29 +147,37 @@ export function useAuthSession(backendUrl) {
 /**
  * Validate session with the backend to ensure it's still valid.
  */
-    useEffect(() => {
-        if (!authState.sessionChecked || !authState.jwtToken) return;
+
+const validatingRef = useRef(false);
+
+useEffect(() => {
+    if (!authState.justLoggedIn || !authState.sessionChecked || !authState.jwtToken || !authState.tokenValid || validatingRef.current) {
+        return;
+    }
 
         const validateSession = async () => {
-            try {
-                const response = await fetch(`${backendUrl}/validatesession`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${authState.jwtToken}`,
-                    },
-                    credentials: "include",
-                });
-                setAuthStateProperty('sessionValid', response.ok);
-            } catch (error) {
-                console.error('Session validation failed:', error);
-                setAuthStateProperty('sessionValid', false);
-            }
-        };
+        validatingRef.current = true;
+        try {
+            const response = await fetch(`${backendUrl}/validatesession`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authState.jwtToken}`,
+                },
+                credentials: "include",
+            });
+            setAuthStateProperty('sessionValid', response.ok);
+        } catch (error) {
+            console.error('Session validation failed:', error);
+            setAuthStateProperty('sessionValid', false);
+        } finally {
+            validatingRef.current = false;
+        }
+    };
 
-        validateSession();
-    }, [authState.jwtToken, backendUrl, authState.sessionChecked, setAuthStateProperty]);
-/**
+    validateSession();
+}, [authState.justLoggedIn, authState.sessionChecked, authState.jwtToken, authState.tokenValid, backendUrl, setAuthStateProperty]);
+    /**
  * Validate the JWT token by decoding it and checking its expiration.
  * If invalid, notify the user to log in again.
  */

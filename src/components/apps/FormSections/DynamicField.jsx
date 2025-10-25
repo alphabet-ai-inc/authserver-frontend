@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { toDateTimeLocalValue } from '../../../utils/toDateTimeLocal.js';
+
 const DynamicField = ({
   type = 'text',
   name,
@@ -14,6 +14,50 @@ const DynamicField = ({
   placeholder,
   ...props
 }) => {
+  const convertValue = (rawValue, fieldType) => {
+    if (rawValue === '' || rawValue === null || rawValue === undefined) {
+      return '';
+    }
+
+    switch (fieldType) {
+      case 'number':
+      case 'range':
+        return rawValue === '' ? '' : Number(rawValue);
+      case 'checkbox':
+        return Boolean(rawValue);
+      case 'date':
+        // Extract date part from datetime-local or return as-is for date input
+        if (typeof rawValue === 'string' && rawValue.includes('T')) {
+          return rawValue.split('T')[0]; // Return only the date part
+        }
+        return rawValue;
+      case 'datetime-local':
+        // Return full datetime string
+        return rawValue;
+      default:
+        return rawValue;
+    }
+  };
+
+  const handleChange = (e) => {
+    const { value: rawValue, type: inputType, checked } = e.target;
+
+    let finalValue;
+    if (inputType === 'checkbox') {
+      finalValue = checked;
+    } else {
+      finalValue = convertValue(rawValue, type);
+    }
+
+    onChange({
+      target: {
+        name,
+        value: finalValue,
+        type: inputType
+      },
+    });
+  };
+
   const handleArrayChange = (e) => {
     const { value: optionValue, checked } = e.target;
     const newValue = Array.isArray(value) ? [...value] : [];
@@ -30,6 +74,36 @@ const DynamicField = ({
     });
   };
 
+  const formatValueForInput = (val, fieldType) => {
+    if (val === null || val === undefined) return '';
+
+    switch (fieldType) {
+      case 'number':
+      case 'range':
+        return val.toString();
+      case 'date':
+        // If it's a datetime string, extract date part
+        if (typeof val === 'string' && val.includes('T')) {
+          return val.split('T')[0];
+        }
+        // If it's a timestamp, convert to date string
+        if (typeof val === 'number' && val > 0) {
+          const date = new Date(val * 1000); // Convert seconds to milliseconds
+          return date.toISOString().split('T')[0];
+        }
+        return val;
+      case 'datetime-local':
+        // Convert timestamp to datetime-local format
+        if (typeof val === 'number' && val > 0) {
+          const date = new Date(val * 1000);
+          return date.toISOString().slice(0, 16);
+        }
+        return val;
+      default:
+        return val;
+    }
+  };
+
   const renderInput = () => {
     switch (type) {
       case 'select':
@@ -37,8 +111,8 @@ const DynamicField = ({
           <select
             className={`form-select ${error ? 'is-invalid' : ''}`}
             name={name}
-            value={value || ''}
-            onChange={onChange}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
             multiple={multiple}
           >
             {!multiple && <option value="">Select {label}</option>}
@@ -76,30 +150,57 @@ const DynamicField = ({
           <textarea
             className={`form-control ${error ? 'is-invalid' : ''}`}
             name={name}
-            value={value || ''}
-            onChange={onChange}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
             {...props}
           />
         );
+
       case 'date':
+        return (
+          <input
+            type="date"
+            className={`form-control ${error ? 'is-invalid' : ''}`}
+            name={name}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
+            {...props}
+          />
+        );
+
+      case 'datetime-local':
         return (
           <input
             type="datetime-local"
             className={`form-control ${error ? 'is-invalid' : ''}`}
             name={name}
-            value={toDateTimeLocalValue(value) || ''}
-            onChange={onChange}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
             {...props}
           />
         );
+
+      case 'number':
+      case 'range':
+        return (
+          <input
+            type={type}
+            className={`form-control ${error ? 'is-invalid' : ''}`}
+            name={name}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
+            {...props}
+          />
+        );
+
       default:
         return (
           <input
             type={type}
             className={`form-control ${error ? 'is-invalid' : ''}`}
             name={name}
-            value={value || ''}
-            onChange={onChange}
+            value={formatValueForInput(value, type) || ''}
+            onChange={handleChange}
             {...props}
           />
         );

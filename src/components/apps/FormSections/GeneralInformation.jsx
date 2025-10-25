@@ -1,6 +1,5 @@
 import DynamicField from "./DynamicField.jsx";
 import { stringArrayToTextareaValue, textareaValueToStringArray } from '../../../utils/ArrayHandler.js';
-import { dateToUnixBigInt } from "../../../utils/Unix2Ymd.js";
 
 // import { stringArrayToTextareaValue } from '../../../utils/ArrayHandler.js';
 export const GeneralInformation = ({ formData, handleChange, errors, releaseOptions }) => (
@@ -15,10 +14,12 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
         <DynamicField
           name="id"
           label="Application ID"
+          type="number"
           value={formData.id}
           colWidth={6}
           disabled
           readOnly
+          required
         />
 
         <DynamicField
@@ -124,11 +125,11 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
         />
 
         <DynamicField
-          name="license"
+          name="license_type"
           label="License Type"
-          value={formData.license}
+          value={formData.license_type}
           onChange={handleChange}
-          error={errors.license}
+          error={errors.license_type}
           colWidth={12}
         />
 
@@ -142,11 +143,11 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
         />
 
         <DynamicField
-          name="website"
+          name="web"
           label="Website"
-          value={formData.website}
+          value={formData.web}
           onChange={handleChange}
-          error={errors.website}
+          error={errors.web}
           colWidth={12}
         />
 
@@ -160,11 +161,11 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
         />
 
         <DynamicField
-          name="landingpage"
+          name="landing_page"
           label="Landing Page"
-          value={formData.landingpage}
+          value={formData.landing_page}
           onChange={handleChange}
-          error={errors.landingpage}
+          error={errors.landing_page}
           colWidth={12}
         />
 
@@ -173,15 +174,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           label="Creation Date"
           type="date"
           value={formData.created}
-          onChange={(event) => {
-            try {
-              const unixTime = dateToUnixBigInt(event.target.value);
-              handleChange({ target: { name: 'updated', value: unixTime } });
-            } catch (err) {
-              handleChange({ target: { name: 'updated', value: formData.updated } });
-              alert(err.message);
-            }
-          }}
+          onChange={handleChange}
           error={errors.created}
         />
 
@@ -189,19 +182,10 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           name="updated"
           label="Release Date"
           type="date"
-          value={formData.updated}
-          onChange={(event) => {
-            try {
-              const unixTime = dateToUnixBigInt(event.target.value);
-              handleChange({ target: { name: 'updated', value: unixTime } });
-            } catch (err) {
-              handleChange({ target: { name: 'updated', value: formData.updated } });
-              alert(err.message);
-            }
-          }}
+          value={formData.updated} // Pass the Unix timestamp directly
+          onChange={handleChange} // Use the standard handleChange
           error={errors.updated}
         />
-
       </div>
     </div>
   </section>

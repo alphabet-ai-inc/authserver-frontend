@@ -11,11 +11,11 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
           </h4>
           <div className="row g-3">
             <DynamicField
-              name="BackupRecoveryOptions"
+              name="backup_recovery_options"
               label="Backup and Recovery Options"
               onChange={handleChange}
-              value={formData.BackupRecoveryOptions}
-              error={errors.BackupRecoveryOptions}
+              value={formData.backup_recovery_options}
+              error={errors.backup_recovery_options}
               type="textarea"
               placeholder="Enter backup and recovery options"
               columns={12}
@@ -23,11 +23,11 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             />
 
             <DynamicField
-              name="localizationSupport"
+              name="localization_support"
               label="Localization Support"
               onChange={handleChange}
-              value={formData.localizationSupport}
-              error={errors.localizationSupport}
+              value={formData.localization_support}
+              error={errors.localization_support}
               type="textarea"
               placeholder="Enter localization support details"
               columns={12}
@@ -35,11 +35,11 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             />
 
             <DynamicField
-              name="accessibilityFeatures"
+              name="accessibility_features"
               label="Accessibility Features"
               onChange={handleChange}
-              value={formData.accessibilityFeatures}
-              error={errors.accessibilityFeatures}
+              value={formData.accessibility_features}
+              error={errors.accessibility_features}
               type="textarea"
               placeholder="Enter accessibility features"
               columns={12}
@@ -47,22 +47,22 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             />
 
             <DynamicField
-                name="teamStructure"
+                name="team_structure"
                 label="Team Structure"
                 onChange={handleChange}
-                value={formData.teamStructure}
-                error={errors.teamStructure}
+                value={formData.team_structure}
+                error={errors.team_structure}
                 type="textarea"
                 placeholder="Enter team structure"
                 columns={12}
                 rows={4}
             />
             <DynamicField
-              name="dataBackupLocation"
+              name="data_backup_location"
               label="Data Backup Location"
               onChange={handleChange}
-              value={formData.dataBackupLocation}
-              error={errors.dataBackupLocation}
+              value={formData.data_backup_location}
+              error={errors.data_backup_location}
               type="text"
               placeholder="Enter data backup location"
             />

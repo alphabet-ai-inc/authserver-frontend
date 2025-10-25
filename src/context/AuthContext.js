@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { useAuthSession } from "../hooks/useAuthSession";
 /**
  * Authentication context and provider for managing user authentication state.
@@ -11,8 +11,9 @@ const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
 export function AuthProvider({ children }) {
   const auth = useAuthSession(backendUrl);
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
   return (
-    <AuthContext.Provider value={auth}>
+    <AuthContext.Provider value={{ ...auth, justLoggedIn, setJustLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

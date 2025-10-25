@@ -10,69 +10,69 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
 
         <div className="row g-3">
           <DynamicField
-            name="environmentalImpact"
+            name="environmental_impact"
             label="Environmental Impact"
             type="textarea"
             rows={4}
             colWidth={12}
-            value={formData.environmentalImpact}
+            value={formData.environmental_impact}
             onChange={handleChange}
-            error={errors.environmentalImpact}
+            error={errors.environmental_impact}
           />
 
           <DynamicField
-            name="socialImpact"
+            name="social_impact"
             label="Social Impact"
             type="textarea"
             rows={4}
             colWidth={12}
-            value={formData.socialImpact}
+            value={formData.social_impact}
             onChange={handleChange}
-            error={errors.socialImpact}
+            error={errors.social_impact}
           />
 
           <DynamicField
-            name="intellectualProperty"
+            name="intellectual_property"
             label="Intellectual Property"
             type="textarea"
-            value={formData.intellectualProperty}
+            value={formData.intellectual_property}
             onChange={handleChange}
-            error={errors.intellectualProperty}
+            error={errors.intellectual_property}
             rows={4}
             placeholder="Describe your intellectual property strategy"
             colWidth={12}
           />
 
           <DynamicField
-            name="fundingInvestment"
+            name="funding_investment"
             label="Funding Investment"
             type="numeric"
-            value={formData.fundingInvestment}
+            value={formData.funding_investment}
             onChange={handleChange}
-            error={errors.fundingInvestment}
+            error={errors.funding_investment}
             placeholder="Put a number to the present funding investment"
           />
           <DynamicField
-            name="exitStrategy"
+            name="exit_strategy"
             label="Exit Strategy"
             type="textarea"
             rows={4}
             colWidth={12}
-            value={formData.exitStrategy}
+            value={formData.exit_strategy}
             onChange={handleChange}
-            error={errors.exitStrategy}
+            error={errors.exit_strategy}
             placeholder="Describe your exit strategy"
           />
 
           <DynamicField
-            name="analyticsTools"
+            name="analytics_tools"
             label="Analytics Tools"
             type="textarea"
             rows={4}
             colWidth={12}
-            value={formData.analyticsTools}
+            value={formData.analytics_tools}
             onChange={handleChange}
-            error={errors.analyticsTools}
+            error={errors.analytics_tools}
             placeholder="List the analytics tools you use"
           />
 

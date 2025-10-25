@@ -10,11 +10,11 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
 
         <div className="row g-3">
           <DynamicField
-            name="revenueStreams"
             type="checkbox-group"
-            value={formData.revenueStreams}
+            name="revenue_streams"
+            value={formData.revenue_streams}
             onChange={handleChange}
-            error={errors.revenueStreams}
+            error={errors.revenue_streams}
             options={[
               { value: 'subscription', label: 'Subscription' },
               { value: 'license', label: 'License' },
@@ -28,11 +28,11 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
         </div>
         <div className="row g-3">
           <DynamicField
-            name="customerSegments"
+            name="customer_segments"
             type="checkbox-group"
-            value={formData.customerSegments}
+            value={formData.customer_segments}
             onChange={handleChange}
-            error={errors.customerSegments}
+            error={errors.customer_segments}
             options={[
               { value: 'high', label: 'High Value Customers' },
               { value: 'medium', label: 'Medium Value Customers' },
@@ -57,24 +57,24 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
 
         <div className="row g-3">
           <DynamicField
-            name="valuePropositions"
+            name="value_propositions"
             type="textarea"
             rows={5}
             label="Value Propositions"
             colsWidth={12}
-            value={formData.valuePropositions}
+            value={formData.value_propositions}
             onChange={handleChange}
-            error={errors.valuePropositions}
+            error={errors.value_propositions}
           />
         </div>
 
           <DynamicField
-          name="pricingTiers"
+          name="pricing_tiers"
           type="checkbox-group"
           label="Pricing Tiers"
-          value={formData.pricingTiers}
+          value={formData.pricing_tiers}
           onChange={handleChange}
-          error={errors.pricingTiers}
+          error={errors.pricing_tiers}
           options={[
             { value: 'basic', label: 'Basic' },
             { value: 'standard', label: 'Standard' },
@@ -97,40 +97,40 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
 
         <div className="row g-3">
           <DynamicField
-            name="costStructure"
+            name="cost_structure"
             type="textarea"
             rows={5}
             label="Cost Structure"
             colsWidth={12}
-            value={formData.costStructure}
+            value={formData.cost_structure}
             onChange={handleChange}
-            error={errors.costStructure}
+            error={errors.cost_structure}
           />
         </div>
 
         <div className="row g-3">
           <DynamicField
-            name="customerRelationships"
+            name="customer_relationships"
             type="textarea"
             rows={5}
             label="Customer Relationships"
             colsWidth={12}
-            value={formData.customerRelationships}
+            value={formData.customer_relationships}
             onChange={handleChange}
-            error={errors.customerRelationships}
+            error={errors.customer_relationships}
           />
         </div>
 
         <div className="row g-3">
           <DynamicField
-            name="unfairAdvantages"
+            name="unfair_advantages"
             type="textarea"
             rows={5}
             label="Unfair Advantages"
             colsWidth={12}
-            value={formData.unfairAdvantages}
+            value={formData.unfair_advantages}
             onChange={handleChange}
-            error={errors.unfairAdvantages}
+            error={errors.unfair_advantages}
           />
         </div>
 

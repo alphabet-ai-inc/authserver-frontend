@@ -23,67 +23,6 @@ const FIELD_GROUPS = [
   'ImpactStrategy'
 ];
 
-const INITIAL_STATE = {
-  id: 0,
-	name: '',
-	release: '',
-	path: '',
-	init: '',
-	web: '',
-	title: '',
-	created: '',
-	updated: '',
-	description: '',
-	positioningStmt: '',
-	logo: '',
-	category: '',
-	platform: '',
-	developer: '',
-	licenseType: '',
-	size: '',
-	compatibility: '',
-	integrationCapabilities: '',
-	developmentStack: '',
-	apiDocumentation: '',
-	securityFeatures: '',
-	regulatoryCompliance: '',
-	revenueStreams: '',
-	customerSegments: '',
-	channels: '',
-	valueProposition: '',
-	pricingTiers: '',
-	partnerships: '',
-	costStructure: '',
-	customerRelationships: '',
-	unfairAdvantage: '',
-	roadmap: '',
-	versionControl: '',
-	errorRate: '',
-	averageResponseTime: '',
-	uptimePercentage: '',
-	keyActivities: '',
-	activeUsers: '',
-	userRetentionRate: '',
-	userAcquisitionCost: '',
-	churnRate: '',
-	monthlyRecurringRevenue: '',
-	userFeedback: '',
-	backupRecoveryOptions: '',
-	localizationSupport: '',
-	accessibilityFeatures: '',
-	teamStructure: '',
-	dataBackupLocation: '',
-	environmentalImpact: '',
-	socialImpact: '',
-	intellectualProperty: '',
-	fundingsInvestment: '',
-	exitStrategy: '',
-	analyticsTools: '',
-	keyMetrics: '',
-	url: '',
-	landingPage: '',
-};
-
 // Simple error handler for demonstration; customize as needed
 const handleError = (error) => {
   console.error(error);
@@ -96,7 +35,7 @@ const EditApp = () => {
   const { id } = useParams();
   const appId = parseInt(id || "0", 10);
 
-  const [ formData, setFormData ] = useState({INITIAL_STATE});
+  const [ formData, setFormData ] = useState({});
   const [ releaseOptions, setReleaseOptions ] = useState([]);
   const [errors, setErrors] = useState({});
 
@@ -108,15 +47,10 @@ const EditApp = () => {
       },
     });
     if (!response.ok) throw new Error('Failed to fetch releases');
-
-    // return (await response.json() || []).map(item => ({
-    //   value: item.value ?? item.id ?? '',
-    //   label: item.label ?? item.value ?? item.id ?? '',
-    // }));
-    return (await response.json() || []).map(item => ({
-      value: item.id || '',
-      label: item.value || '',
-    }));
+      return (await response.json() || []).map(item => ({
+        value: item.id || '',
+        label: item.value || '',
+      }));
   }, []);
 
   useEffect(() => {
@@ -133,24 +67,30 @@ const EditApp = () => {
 
 
   const fetchAppData = useCallback(async (token, id) => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/apps/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) throw new Error('Failed to fetch app details');
-
-    return response.json();
-  }, []);
+    if (appId === 0)
+      {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/newapp`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      if (!response.ok) throw new Error('Failed to fetch app details');
+      return response.json();
+      } else {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/apps/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      if (!response.ok) throw new Error('Failed to fetch app details');
+      return response.json();
+    }
+  }, [appId]);
 
   useEffect(() => {
     if (!sessionChecked || !jwtToken) return;
-    if (appId === 0) {
-      setFormData(INITIAL_STATE);
-      return;
-    }
     if (isNaN(appId) || appId < 0) {
       handleError(new Error('Invalid application ID'));
       return;
@@ -160,8 +100,8 @@ const EditApp = () => {
     fetchAppData(jwtToken, appId)
       .then(data => {
         // Additional processing if needed
-        console.log("Fetched app data:", data);
-        setFormData(data || INITIAL_STATE);
+        // console.log("Fetched app data:", data);
+        setFormData(data);
       })
       .catch(handleError);
   }, [appId, jwtToken, sessionChecked, fetchAppData]);
@@ -173,24 +113,26 @@ const EditApp = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmitForm = async (event) => {
-    event.preventDefault();
+const handleSubmitForm = async (event) => {
+  event.preventDefault();
 
-    const validationErrors = validateForm(formData, FIELD_GROUPS);
-    setErrors(validationErrors);
+  const validationErrors = validateForm(formData, FIELD_GROUPS);
+  setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length > 0) return;
+  if (Object.keys(validationErrors).length > 0) return;
 
-    console.log("Form data to submit:", formData);
-    try {
-      await submitAppForm(formData, appId, jwtToken);
-      navigate('/apps');
-    } catch (error) {
-      handleError(error);
-    }
-  };
+  console.log("Form data to submit:", formData);
 
-  return (
+  try {
+    // ✅ Send as JSON, not FormData
+    await submitAppForm(formData, appId, jwtToken); // Send formData directly
+    navigate(`/admin/apps/${appId}`);
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+return (
   <>
     <NavBar />
     <form onSubmit={handleSubmitForm} className="container-lg my-4">
