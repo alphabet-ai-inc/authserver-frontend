@@ -11,6 +11,7 @@ import { ImpactStrategy } from './apps/FormSections/ImpactStrategy.jsx';
 import { validateForm } from './apps/AppFormValidation.js';
 import { submitAppForm } from './apps/AppFormHandlers';
 import { NavBar } from './NavBar.jsx';
+import Swal from 'sweetalert2';
 
 // Define FIELD_GROUPS according to your form validation requirements
 const FIELD_GROUPS = [
@@ -121,12 +122,23 @@ const handleSubmitForm = async (event) => {
 
   if (Object.keys(validationErrors).length > 0) return;
 
-  console.log("Form data to submit:", formData);
+  // console.log("Form data to submit:", formData);
 
   try {
     // ✅ Send as JSON, not FormData
     await submitAppForm(formData, appId, jwtToken); // Send formData directly
-    navigate(`/admin/apps/${appId}`);
+
+    // Show success message
+    const appName = formData.name || 'Application';
+    const action = appId === 0 ? 'created' : 'updated';
+    await Swal.fire({
+      title: 'Success!',
+      text: `App "${appName}" ${action} successfully`,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+
+    navigate('/admin/apps');
   } catch (error) {
     handleError(error);
   }

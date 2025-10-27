@@ -1,11 +1,16 @@
-import { fetchWithHandling, handleError } from "../../utils/fetchHandling";
+import { handleError } from "../../utils/fetchHandling";
+
 export const fetchAppDetails = async (jwtToken) => {
   try {
-    const [releases] = await Promise.all([
-      fetchWithHandling(`${process.env.REACT_APP_BACKEND_URL}/releases`, {
-        headers: { Authorization: `Bearer ${jwtToken}` }
-      }).then(res => res.json())
-    ]);
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/releases`, {
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch releases');
+    }
+
+    const releases = await response.json();
 
     return {
       release: releases.map(r => ({ value: r.id, label: r.value }))
@@ -17,13 +22,13 @@ export const fetchAppDetails = async (jwtToken) => {
 };
 
 export const submitAppForm = async (formData, appId, jwtToken) => {
-  console.log('RUNNING CORRECT VERSION OF submitAppForm');
+  // console.log('RUNNING CORRECT VERSION OF submitAppForm');
 
   const method = appId === 0 ? 'POST' : 'PATCH';
   const url = `${process.env.REACT_APP_BACKEND_URL}/admin/apps/${appId || 0}`;
 
   try {
-    const response = await fetchWithHandling(url, {
+    const response = await fetch(url, {
       method,
       headers: {
         "Content-Type": "application/json",
