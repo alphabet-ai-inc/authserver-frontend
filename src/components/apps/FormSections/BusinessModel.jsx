@@ -1,6 +1,7 @@
 import DynamicField from "./DynamicField.jsx";
+import { stringArrayToTextareaValue, textareaValueToStringArray } from '../../../utils/ArrayHandler.js';
 
-export const BusinessModel = ({ formData, handleChange, errors }) => {
+export const BusinessModel = ({ formData, handleChange, errors }) => (
     <section className="form-section card mb-4">
       <div className="card-body">
         <h4 className="card-title mb-4">
@@ -12,9 +13,8 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
           <DynamicField
             type="checkbox-group"
             name="revenue_streams"
-            value={formData.revenue_streams}
-            onChange={handleChange}
             error={errors.revenue_streams}
+            multiple
             options={[
               { value: 'subscription', label: 'Subscription' },
               { value: 'license', label: 'License' },
@@ -24,6 +24,18 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
               { value: 'donations', label: 'Donations' },
               { value: 'other', label: 'Other' }
             ]}
+          rows={3}
+          value={stringArrayToTextareaValue(formData.revenue_streams)}
+          onChange={(event) => {
+            try {
+              const arrayValue = textareaValueToStringArray(event.target.value);
+              handleChange({ target: { name: 'revenue_streams', value: arrayValue } });
+            } catch (err) {
+              handleChange({ target: { name: 'revenue_streams', value: formData.platform } });
+              alert(err.message);
+            }
+          }}
+          colWidth={12}
           />
         </div>
         <div className="row g-3">
@@ -61,7 +73,7 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
             type="textarea"
             rows={5}
             label="Value Propositions"
-            colsWidth={12}
+            colswidth={12}
             value={formData.value_propositions}
             onChange={handleChange}
             error={errors.value_propositions}
@@ -75,6 +87,7 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
           value={formData.pricing_tiers}
           onChange={handleChange}
           error={errors.pricing_tiers}
+          multiple
           options={[
             { value: 'basic', label: 'Basic' },
             { value: 'standard', label: 'Standard' },
@@ -86,11 +99,20 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
           <DynamicField
             name="partnerships"
             type="textarea"
-            rows={5}
             label="Partnerships"
-            colsWidth={12}
-            value={formData.partnerships}
-            onChange={handleChange}
+            colswidth={12}
+            rows={3}
+            value={stringArrayToTextareaValue(formData.partnerships)}
+            onChange={(event) => {
+              try {
+                const arrayValue = textareaValueToStringArray(event.target.value);
+                handleChange({ target: { name: 'partnerships', value: arrayValue } });
+              } catch (err) {
+                handleChange({ target: { name: 'partnerships', value: formData.partnerships } });
+                alert(err.message);
+              }
+            }}
+            colWidth={12}
             error={errors.partnerships}
           />
         </div>
@@ -99,11 +121,19 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
           <DynamicField
             name="cost_structure"
             type="textarea"
-            rows={5}
             label="Cost Structure"
-            colsWidth={12}
-            value={formData.cost_structure}
-            onChange={handleChange}
+            colswidth={12}
+            rows={3}
+            value={stringArrayToTextareaValue(formData.cost_structure)}
+            onChange={(event) => {
+              try {
+                const arrayValue = textareaValueToStringArray(event.target.value);
+                handleChange({ target: { name: 'cost_structure', value: arrayValue } });
+              } catch (err) {
+                handleChange({ target: { name: 'cost_structure', value: formData.cost_structure} });
+                alert(err.message);
+              }
+            }}
             error={errors.cost_structure}
           />
         </div>
@@ -112,11 +142,19 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
           <DynamicField
             name="customer_relationships"
             type="textarea"
-            rows={5}
             label="Customer Relationships"
-            colsWidth={12}
-            value={formData.customer_relationships}
-            onChange={handleChange}
+            colswidth={12}
+            rows={3}
+            value={stringArrayToTextareaValue(formData.cost_structure)}
+            onChange={(event) => {
+              try {
+                const arrayValue = textareaValueToStringArray(event.target.value);
+                handleChange({ target: { name: 'customer_relationships', value: arrayValue } });
+              } catch (err) {
+                handleChange({ target: { name: 'customer_relationships', value: formData.customer_relationships} });
+                alert(err.message);
+              }
+            }}
             error={errors.customer_relationships}
           />
         </div>
@@ -127,7 +165,7 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
             type="textarea"
             rows={5}
             label="Unfair Advantages"
-            colsWidth={12}
+            colswidth={12}
             value={formData.unfair_advantages}
             onChange={handleChange}
             error={errors.unfair_advantages}
@@ -135,4 +173,4 @@ export const BusinessModel = ({ formData, handleChange, errors }) => {
         </div>
 
     </section>
-};
+);

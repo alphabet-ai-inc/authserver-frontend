@@ -15,7 +15,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
                     onChange={handleChange}
                     value={formData.roadmap}
                     error={errors.roadmap   }
-                    colWidth={12}
+                    colswidth={12}
                     type="textarea"
                     rows={5}
                 />
@@ -25,7 +25,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
                     onChange={handleChange}
                     value={formData.version_control}
                     error={errors.version_control}
-                    colWidth={12}
+                    colswidth={12}
                     type="textarea"
                     rows={5}
                 />
@@ -35,7 +35,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
                     onChange={handleChange}
                     value={formData.error_rate}
                     error={errors.error_rate}
-                    colWidth={12}
+                    colswidth={12}
                     type="textarea"
                     rows={5}
                 />
@@ -63,7 +63,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
                     onChange={handleChange}
                     value={stringArrayToTextareaValue(formData.key_activities)}
                     error={errors.key_activities}
-                    colWidth={12}
+                    colswidth={12}
                     type="textarea"
                     rows={5}
                 />

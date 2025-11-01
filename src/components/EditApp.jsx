@@ -49,8 +49,8 @@ const EditApp = () => {
     });
     if (!response.ok) throw new Error('Failed to fetch releases');
       return (await response.json() || []).map(item => ({
-        value: item.id || '',
-        label: item.value || '',
+        value: item.value || '',  // Use the release version string as value
+        label: item.value || '',  // Display the release version string
       }));
   }, []);
 

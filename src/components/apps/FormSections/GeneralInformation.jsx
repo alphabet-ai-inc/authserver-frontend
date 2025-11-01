@@ -1,8 +1,11 @@
 import DynamicField from "./DynamicField.jsx";
 import { stringArrayToTextareaValue, textareaValueToStringArray } from '../../../utils/ArrayHandler.js';
-
-// import { stringArrayToTextareaValue } from '../../../utils/ArrayHandler.js';
-export const GeneralInformation = ({ formData, handleChange, errors, releaseOptions }) => (
+export const GeneralInformation = ({
+  formData,
+  handleChange,
+  errors,
+  releaseOptions
+}) => (
   <section className="form-section card mb-4">
     <div className="card-body">
       <h4 className="card-title mb-4">
@@ -16,7 +19,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           label="Application ID"
           type="number"
           value={formData.id}
-          colWidth={6}
+          colswidth={6}
           disabled
           readOnly
           required
@@ -29,7 +32,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           onChange={handleChange}
           error={errors.name}
           required
-          colWidth={6}
+          colswidth={6}
         />
 
         <DynamicField
@@ -41,7 +44,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           onChange={handleChange}
           error={errors.release}
           required
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -52,7 +55,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.description}
           onChange={handleChange}
           error={errors.description}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -61,7 +64,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.title}
           onChange={handleChange}
           error={errors.title}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -72,7 +75,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.positioning_stmt}
           onChange={handleChange}
           error={errors.positioning_stmt}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -91,7 +94,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.category}
           onChange={handleChange}
           error={errors.category}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -109,10 +112,8 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
               alert(err.message);
             }
           }}
-          // value={formData.platform}
-          // onChange={handleChange}
           error={errors.platform}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -121,7 +122,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.developer}
           onChange={handleChange}
           error={errors.developer}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -130,7 +131,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.license_type}
           onChange={handleChange}
           error={errors.license_type}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -148,7 +149,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.web}
           onChange={handleChange}
           error={errors.web}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -157,7 +158,7 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.url}
           onChange={handleChange}
           error={errors.url}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
@@ -166,13 +167,14 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           value={formData.landing_page}
           onChange={handleChange}
           error={errors.landing_page}
-          colWidth={12}
+          colswidth={12}
         />
 
         <DynamicField
           name="created"
           label="Creation Date"
           type="date"
+          readOnly
           value={formData.created}
           onChange={handleChange}
           error={errors.created}
@@ -182,8 +184,9 @@ export const GeneralInformation = ({ formData, handleChange, errors, releaseOpti
           name="updated"
           label="Release Date"
           type="date"
-          value={formData.updated} // Pass the Unix timestamp directly
-          onChange={handleChange} // Use the standard handleChange
+          readOnly
+          value={formData.updated}
+          onChange={handleChange}
           error={errors.updated}
         />
       </div>
