@@ -1,7 +1,8 @@
 {
   "name": "authserver",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^16.3.0",
@@ -9,6 +10,7 @@
     "axios": "^1.12.1",
     "bootstrap-icons": "^1.13.1",
     "date-fns": "^4.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.20.0",

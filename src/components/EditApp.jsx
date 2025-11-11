@@ -13,7 +13,6 @@ import { submitAppForm } from './apps/AppFormHandlers';
 import { NavBar } from './NavBar.jsx';
 import Swal from 'sweetalert2';
 
-// Define FIELD_GROUPS according to your form validation requirements
 const FIELD_GROUPS = [
   'GeneralInformation',
   'TechnicalSpecifications',
@@ -24,10 +23,33 @@ const FIELD_GROUPS = [
   'ImpactStrategy'
 ];
 
-// Simple error handler for demonstration; customize as needed
-const handleError = (error) => {
-  console.error(error);
-  alert('An error occurred. Please try again.');
+const cleanFormData = (data) => {
+  if (!data || typeof data !== 'object') {
+    console.warn('Invalid data passed to cleanFormData:', data);
+    return {};
+  }
+
+  const cleaned = { ...data };
+  const fileFields = ['logo', 'image', 'thumbnail', 'icon'];
+
+  fileFields.forEach(field => {
+    if (cleaned[field]) {
+      try {
+        if (typeof cleaned[field] === 'string') {
+          if (!cleaned[field].startsWith('http') && !cleaned[field].startsWith('data:')) {
+            cleaned[field] = null;
+          }
+        } else if (!(cleaned[field] instanceof File)) {
+          cleaned[field] = null;
+        }
+      } catch (error) {
+        console.warn(`Error cleaning field ${field}:`, error);
+        cleaned[field] = null;
+      }
+    }
+  });
+
+  return cleaned;
 };
 
 const EditApp = () => {
@@ -36,48 +58,44 @@ const EditApp = () => {
   const { id } = useParams();
   const appId = parseInt(id || "0", 10);
 
-  const [ formData, setFormData ] = useState({});
-  const [ releaseOptions, setReleaseOptions ] = useState([]);
+  const [formData, setFormData] = useState({});
+  const [releaseOptions, setReleaseOptions] = useState([]);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
+  const [activeSection, setActiveSection] = useState('general');
 
   const fetchReleases = useCallback(async (token) => {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/releases`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) throw new Error('Failed to fetch releases');
-      return (await response.json() || []).map(item => ({
-        value: item.value || '',  // Use the release version string as value
-        label: item.value || '',  // Display the release version string
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/releases`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) throw new Error('Failed to fetch releases');
+      const data = await response.json();
+      return (data || []).map(item => ({
+        value: item.value || '',
+        label: item.label || item.value || '',
       }));
+    } catch (error) {
+      console.error('Error fetching releases:', error);
+      throw error;
+    }
   }, []);
 
-  useEffect(() => {
-    if (!sessionChecked || !jwtToken) return;
-    if (typeof setReleaseOptions !== 'function') {
-      console.log("setReleaseOptions type:", typeof setReleaseOptions);
-      console.error("setReleaseOptions is not a function");
-      return;
-    }
-    fetchReleases(jwtToken)
-      .then(options => setReleaseOptions(options))
-      .catch(handleError);
-  }, [jwtToken, sessionChecked, fetchReleases, setReleaseOptions]);
-
-
   const fetchAppData = useCallback(async (token, id) => {
-    if (appId === 0)
-      {
+    try {
+      if (id === 0) {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/newapp`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         });
-      if (!response.ok) throw new Error('Failed to fetch app details');
-      return response.json();
+        if (!response.ok) throw new Error('Failed to fetch app details');
+        return await response.json();
       } else {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/apps/${id}`, {
           headers: {
@@ -85,120 +103,382 @@ const EditApp = () => {
             'Content-Type': 'application/json',
           },
         });
-      if (!response.ok) throw new Error('Failed to fetch app details');
-      return response.json();
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch app details: ${response.status} ${errorText}`);
+        }
+        return await response.json();
+      }
+    } catch (error) {
+      console.error("Error in fetchAppData:", error);
+      throw error;
     }
-  }, [appId]);
+  }, []);
 
+  // Releases fetch
   useEffect(() => {
     if (!sessionChecked || !jwtToken) return;
+
+    fetchReleases(jwtToken)
+      .then(setReleaseOptions)
+      .catch(error => {
+        console.error('Release fetch error:', error);
+      });
+  }, [jwtToken, sessionChecked, fetchReleases]);
+
+  // Main app data fetch
+  useEffect(() => {
+    if (!sessionChecked || !jwtToken) return;
+
     if (isNaN(appId) || appId < 0) {
-      handleError(new Error('Invalid application ID'));
+      setFetchError('Invalid application ID');
+      setLoading(false);
       return;
     }
-    // Fetch app details if editing an existing app
+
+    let ignore = false;
 
     fetchAppData(jwtToken, appId)
       .then(data => {
-        // Additional processing if needed
-        // console.log("Fetched app data:", data);
-        setFormData(data);
+        if (!ignore) {
+          setFormData(cleanFormData(data));
+          setLoading(false);
+        }
       })
-      .catch(handleError);
-  }, [appId, jwtToken, sessionChecked, fetchAppData]);
+      .catch(error => {
+        if (!ignore) {
+          setFetchError(error.message);
+          setLoading(false);
+        }
+      });
 
-  // console.log("FORM DATA:", formData);
+    return () => {
+      ignore = true;
+    };
+  }, [appId, jwtToken, sessionChecked, fetchAppData]);
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-const handleSubmitForm = async (event) => {
-  event.preventDefault();
+  const handleSubmitForm = async (event) => {
+    event.preventDefault();
 
-  const validationErrors = validateForm(formData, FIELD_GROUPS);
-  setErrors(validationErrors);
+    const validationErrors = validateForm(formData, FIELD_GROUPS);
+    setErrors(validationErrors);
 
-  if (Object.keys(validationErrors).length > 0) return;
+    if (Object.keys(validationErrors).length > 0) return;
 
-  // console.log("Form data to submit:", formData);
+    try {
+      await submitAppForm(formData, appId, jwtToken);
 
-  try {
-    // ✅ Send as JSON, not FormData
-    await submitAppForm(formData, appId, jwtToken); // Send formData directly
+      const appName = formData.name || 'Application';
+      const action = appId === 0 ? 'created' : 'updated';
 
-    // Show success message
-    const appName = formData.name || 'Application';
-    const action = appId === 0 ? 'created' : 'updated';
-    await Swal.fire({
-      title: 'Success!',
-      text: `App "${appName}" ${action} successfully`,
-      icon: 'success',
-      confirmButtonText: 'OK'
-    });
+      await Swal.fire({
+        title: 'Success!',
+        text: `App "${appName}" ${action} successfully`,
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
 
-    navigate('/admin/apps');
-  } catch (error) {
-    handleError(error);
-  }
-};
+      navigate('/apps');
+    } catch (error) {
+      if (error.message === 'SESSION_EXPIRED') {
+        await Swal.fire({
+          title: 'Session Expired',
+          text: 'Your session has expired. Please log in again.',
+          icon: 'warning',
+          confirmButtonText: 'Go to Login'
+        });
+        navigate('/login');
+        return;
+      }
 
-return (
-  <>
-    <NavBar />
-    <form onSubmit={handleSubmitForm} className="container-lg my-4">
-      <GeneralInformation
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-        releaseOptions={releaseOptions}
-      />
+      console.error('Form submission error:', error);
+      let errorMessage = 'An error occurred while saving the application.';
+      if (error.message.includes('Server error:')) {
+        errorMessage = `Server error: ${error.message.split('Server error:')[1]}`;
+      }
 
-      <TechnicalSpecifications
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
+      await Swal.fire({
+        title: 'Error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    }
+  };
 
-      <BusinessModel
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
-
-      <DevelopmentStack
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
-
-      <AnalyticsMetrics
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
-
-      <ComplianceOperations
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
-
-      <ImpactStrategy
-        formData={formData}
-        handleChange={handleFormChange}
-        errors={errors}
-      />
-
-      <div className="d-flex justify-content-end gap-3 mt-4">
-        <button type="submit" className="btn btn-primary btn-lg">
-          <i className="bi bi-save me-2"></i>
-          Save Application
-        </button>
+  // Section Navigation Component - FIXED
+  const SectionNavigation = () => (
+    <div className="col-md-3">
+      <div className="card shadow-sm border-0 h-100">
+        <div className="card-header bg-primary text-white">
+          <h5 className="card-title mb-0">
+            <i className="bi bi-layers me-2"></i>
+            Application Sections
+          </h5>
+        </div>
+        <div className="card-body p-0">
+          <nav className="nav nav-pills flex-column">
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'general' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('general')}
+            >
+              <i className="bi bi-info-circle me-2"></i>
+              General Information
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'technical' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('technical')}
+            >
+              <i className="bi bi-cpu me-2"></i>
+              Technical Specifications
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'business' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('business')}
+            >
+              <i className="bi bi-graph-up me-2"></i>
+              Business Model
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'development' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('development')}
+            >
+              <i className="bi bi-code-slash me-2"></i>
+              Development Stack
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'analytics' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('analytics')}
+            >
+              <i className="bi bi-bar-chart me-2"></i>
+              Analytics & Metrics
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 border-bottom ${activeSection === 'compliance' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('compliance')}
+            >
+              <i className="bi bi-shield-check me-2"></i>
+              Compliance & Operations
+            </button>
+            <button
+              type="button"
+              className={`nav-link text-start rounded-0 ${activeSection === 'impact' ? 'active bg-primary' : 'text-dark'}`}
+              onClick={() => setActiveSection('impact')}
+            >
+              <i className="bi bi-rocket me-2"></i>
+              Impact & Strategy
+            </button>
+          </nav>
+        </div>
       </div>
-    </form>
-  </>
+    </div>
+  );
+
+  // Form Content Component - FIXED
+  const FormContent = () => {
+    const renderActiveSection = () => {
+      switch (activeSection) {
+        case 'general':
+          return (
+            <GeneralInformation
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+              releaseOptions={releaseOptions}
+            />
+          );
+        case 'technical':
+          return (
+            <TechnicalSpecifications
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        case 'business':
+          return (
+            <BusinessModel
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        case 'development':
+          return (
+            <DevelopmentStack
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        case 'analytics':
+          return (
+            <AnalyticsMetrics
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        case 'compliance':
+          return (
+            <ComplianceOperations
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        case 'impact':
+          return (
+            <ImpactStrategy
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+            />
+          );
+        default:
+          return (
+            <GeneralInformation
+              formData={formData}
+              handleChange={handleFormChange}
+              errors={errors}
+              releaseOptions={releaseOptions}
+            />
+          );
+      }
+    };
+
+    return (
+      <div className="col-md-9">
+        <div className="card shadow-sm border-0">
+          <div className="card-header bg-light border-0">
+            <h3 className="card-title mb-0">
+              {appId === 0 ? (
+                <>
+                  <i className="bi bi-plus-circle text-primary me-2"></i>
+                  Create New Application
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-pencil-square text-primary me-2"></i>
+                  Edit Application
+                </>
+              )}
+            </h3>
+            <p className="text-muted mb-0 mt-1">
+              {appId === 0
+                ? "Build something amazing! Fill in the details below to create your new application."
+                : "Update your application details and configuration."
+              }
+            </p>
+          </div>
+
+          <div className="card-body">
+            <form onSubmit={handleSubmitForm} id="edit-app-form">
+              {renderActiveSection()}
+
+              <div className="border-top pt-4 mt-4">
+                <div className="d-flex justify-content-between align-items-center">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => navigate('/apps')}
+                  >
+                    <i className="bi bi-arrow-left me-2"></i>
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-primary btn-lg">
+                    <i className="bi bi-save me-2"></i>
+                    {appId === 0 ? 'Create Application' : 'Update Application'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Show error state
+  if (fetchError) {
+    return (
+      <>
+        <NavBar />
+        <div className="container-lg my-4">
+          <div className="card border-danger">
+            <div className="card-header bg-danger text-white">
+              <h4 className="card-title mb-0">
+                <i className="bi bi-exclamation-triangle me-2"></i>
+                Error Loading Application
+              </h4>
+            </div>
+            <div className="card-body">
+              <p className="card-text">{fetchError}</p>
+              <div className="d-flex gap-2">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => window.location.reload()}
+                >
+                  <i className="bi bi-arrow-clockwise me-2"></i>
+                  Retry
+                </button>
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => navigate('/apps')}
+                >
+                  <i className="bi bi-arrow-left me-2"></i>
+                  Back to Apps
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Show loading state
+  if (loading) {
+    return (
+      <>
+        <NavBar />
+        <div className="container-lg my-4">
+          <div className="card">
+            <div className="card-body text-center py-5">
+              <div className="spinner-border text-primary mb-3" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <h5>Loading Application</h5>
+              <p className="text-muted">Preparing your workspace...</p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Show form when data is loaded
+  return (
+    <>
+      <NavBar />
+      <div className="container-fluid my-4">
+        <div className="row">
+          <SectionNavigation />
+          <FormContent />
+        </div>
+      </div>
+    </>
   );
 };
 

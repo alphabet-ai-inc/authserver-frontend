@@ -1,0 +1,30 @@
+// utils/auth.js
+import Swal from 'sweetalert2';
+export const handleAuthError = (error, navigate) => {
+  if (error.message === 'SESSION_EXPIRED' ||
+      (error.message.includes('401') && error.message.includes('token'))) {
+
+    // Clear any stored tokens
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+
+    // Show message and redirect
+    Swal.fire({
+      title: 'Session Expired',
+      text: 'Your session has expired. Please log in again.',
+      icon: 'warning',
+      confirmButtonText: 'Go to Login'
+    }).then(() => {
+      navigate('/login');
+    });
+    return true; // Error was handled
+  }
+  return false; // Error was not handled
+};
+
+// Usage in your component:
+// catch (error) {
+//   if (!handleAuthError(error, navigate)) {
+//     // Handle other errors
+//   }
+// }

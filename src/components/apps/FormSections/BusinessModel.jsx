@@ -1,176 +1,143 @@
 import DynamicField from "./DynamicField.jsx";
-import { stringArrayToTextareaValue, textareaValueToStringArray } from '../../../utils/ArrayHandler.js';
 
 export const BusinessModel = ({ formData, handleChange, errors }) => (
-    <section className="form-section card mb-4">
-      <div className="card-body">
-        <h4 className="card-title mb-4">
-          <i className="bi bi-graph-up me-2"></i>
-          Business Model
-        </h4>
+  <section className="form-section card mb-4 border-0 shadow-sm">
+    <div className="card-header bg-light border-0">
+      <h4 className="card-title mb-0">
+        <i className="bi bi-graph-up text-primary me-2"></i>
+        Business Model
+      </h4>
+      <p className="text-muted mb-0 mt-1 small">
+        Define your business strategy, revenue streams, and customer approach
+      </p>
+    </div>
 
-        <div className="row g-3">
-          <DynamicField
-            type="checkbox-group"
-            name="revenue_streams"
-            error={errors.revenue_streams}
-            multiple
-            options={[
-              { value: 'subscription', label: 'Subscription' },
-              { value: 'license', label: 'License' },
-              { value: 'ads', label: 'Advertising' },
-              { value: 'partnerships', label: 'Partnerships' },
-              { value: 'events', label: 'Events' },
-              { value: 'donations', label: 'Donations' },
-              { value: 'other', label: 'Other' }
-            ]}
-          rows={3}
-          value={stringArrayToTextareaValue(formData.revenue_streams)}
-          onChange={(event) => {
-            try {
-              const arrayValue = textareaValueToStringArray(event.target.value);
-              handleChange({ target: { name: 'revenue_streams', value: arrayValue } });
-            } catch (err) {
-              handleChange({ target: { name: 'revenue_streams', value: formData.platform } });
-              alert(err.message);
-            }
-          }}
+    <div className="card-body">
+      <div className="row g-4">
+        {/* Revenue Streams - Using the new array type */}
+        <DynamicField
+          type="array"
+          name="revenue_streams"
+          label="Revenue Streams"
+          value={formData.revenue_streams}
+          onChange={handleChange}
+          error={errors.revenue_streams}
+          placeholder="Subscription, License, Advertising, Partnerships..."
           colWidth={12}
-          />
-        </div>
-        <div className="row g-3">
-          <DynamicField
-            name="customer_segments"
-            type="checkbox-group"
-            value={formData.customer_segments}
-            onChange={handleChange}
-            error={errors.customer_segments}
-            options={[
-              { value: 'high', label: 'High Value Customers' },
-              { value: 'medium', label: 'Medium Value Customers' },
-              { value: 'low', label: 'Low Value Customers' }
-            ]}
-            />
-        </div>
-        <div className="row g-3">
-          <DynamicField
-            name="channels"
-            type="checkbox-group"
-            value={formData.channels}
-            onChange={handleChange}
-            error={errors.channels}
-            options={[
-              { value: 'social', label: 'Social Media' },
-              { value: 'email', label: 'Email Marketing' },
-              { value: 'ads', label: 'Advertising' }
-            ]}
-          />
-        </div>
+        />
 
-        <div className="row g-3">
-          <DynamicField
-            name="value_propositions"
-            type="textarea"
-            rows={5}
-            label="Value Propositions"
-            colswidth={12}
-            value={formData.value_propositions}
-            onChange={handleChange}
-            error={errors.value_propositions}
-          />
-        </div>
-
-          <DynamicField
-          name="pricing_tiers"
+        {/* Customer Segments - Enhanced checkbox group */}
+        <DynamicField
           type="checkbox-group"
+          name="customer_segments"
+          label="Customer Segments"
+          value={formData.customer_segments}
+          onChange={handleChange}
+          error={errors.customer_segments}
+          options={[
+            { value: 'high', label: 'High Value Customers' },
+            { value: 'medium', label: 'Medium Value Customers' },
+            { value: 'low', label: 'Low Value Customers' }
+          ]}
+          colWidth={12}
+        />
+
+        {/* Channels - Enhanced checkbox group */}
+        <DynamicField
+          type="checkbox-group"
+          name="channels"
+          label="Distribution Channels"
+          value={formData.channels}
+          onChange={handleChange}
+          error={errors.channels}
+          options={[
+            { value: 'social', label: 'Social Media' },
+            { value: 'email', label: 'Email Marketing' },
+            { value: 'ads', label: 'Digital Advertising' },
+            { value: 'partners', label: 'Partner Networks' },
+            { value: 'direct', label: 'Direct Sales' }
+          ]}
+          colWidth={12}
+        />
+
+        {/* Value Propositions */}
+        <DynamicField
+          type="textarea"
+          name="value_propositions"
+          label="Value Propositions"
+          value={formData.value_propositions}
+          onChange={handleChange}
+          error={errors.value_propositions}
+          placeholder="Describe the unique value your application provides to customers..."
+          colWidth={12}
+        />
+
+        {/* Pricing Tiers - Enhanced checkbox group */}
+        <DynamicField
+          type="checkbox-group"
+          name="pricing_tiers"
           label="Pricing Tiers"
           value={formData.pricing_tiers}
           onChange={handleChange}
           error={errors.pricing_tiers}
-          multiple
           options={[
+            { value: 'free', label: 'Free Tier' },
             { value: 'basic', label: 'Basic' },
             { value: 'standard', label: 'Standard' },
-            { value: 'pro', label: 'Pro' },
-            { value: 'enterprise', label: 'Enterprise' }]}
-          />
-        </div>
-        <div className="row g-3">
-          <DynamicField
-            name="partnerships"
-            type="textarea"
-            label="Partnerships"
-            colswidth={12}
-            rows={3}
-            value={stringArrayToTextareaValue(formData.partnerships)}
-            onChange={(event) => {
-              try {
-                const arrayValue = textareaValueToStringArray(event.target.value);
-                handleChange({ target: { name: 'partnerships', value: arrayValue } });
-              } catch (err) {
-                handleChange({ target: { name: 'partnerships', value: formData.partnerships } });
-                alert(err.message);
-              }
-            }}
-            colWidth={12}
-            error={errors.partnerships}
-          />
-        </div>
+            { value: 'pro', label: 'Professional' },
+            { value: 'enterprise', label: 'Enterprise' }
+          ]}
+          colWidth={12}
+        />
 
-        <div className="row g-3">
-          <DynamicField
-            name="cost_structure"
-            type="textarea"
-            label="Cost Structure"
-            colswidth={12}
-            rows={3}
-            value={stringArrayToTextareaValue(formData.cost_structure)}
-            onChange={(event) => {
-              try {
-                const arrayValue = textareaValueToStringArray(event.target.value);
-                handleChange({ target: { name: 'cost_structure', value: arrayValue } });
-              } catch (err) {
-                handleChange({ target: { name: 'cost_structure', value: formData.cost_structure} });
-                alert(err.message);
-              }
-            }}
-            error={errors.cost_structure}
-          />
-        </div>
+        {/* Partnerships - Using the new array type */}
+        <DynamicField
+          type="array"
+          name="partnerships"
+          label="Strategic Partnerships"
+          value={formData.partnerships}
+          onChange={handleChange}
+          error={errors.partnerships}
+          placeholder="Partner A, Partner B, Partner C..."
+          colWidth={12}
+        />
 
-        <div className="row g-3">
-          <DynamicField
-            name="customer_relationships"
-            type="textarea"
-            label="Customer Relationships"
-            colswidth={12}
-            rows={3}
-            value={stringArrayToTextareaValue(formData.cost_structure)}
-            onChange={(event) => {
-              try {
-                const arrayValue = textareaValueToStringArray(event.target.value);
-                handleChange({ target: { name: 'customer_relationships', value: arrayValue } });
-              } catch (err) {
-                handleChange({ target: { name: 'customer_relationships', value: formData.customer_relationships} });
-                alert(err.message);
-              }
-            }}
-            error={errors.customer_relationships}
-          />
-        </div>
+        {/* Cost Structure - Using the new array type */}
+        <DynamicField
+          type="array"
+          name="cost_structure"
+          label="Cost Structure"
+          value={formData.cost_structure}
+          onChange={handleChange}
+          error={errors.cost_structure}
+          placeholder="Development, Marketing, Infrastructure, Support..."
+          colWidth={12}
+        />
 
-        <div className="row g-3">
-          <DynamicField
-            name="unfair_advantages"
-            type="textarea"
-            rows={5}
-            label="Unfair Advantages"
-            colswidth={12}
-            value={formData.unfair_advantages}
-            onChange={handleChange}
-            error={errors.unfair_advantages}
-          />
-        </div>
+        {/* Customer Relationships - Using the new array type */}
+        <DynamicField
+          type="array"
+          name="customer_relationships"
+          label="Customer Relationships"
+          value={formData.customer_relationships}
+          onChange={handleChange}
+          error={errors.customer_relationships}
+          placeholder="Self-service, Personal assistance, Automated support..."
+          colWidth={12}
+        />
 
-    </section>
+        {/* Unfair Advantages */}
+        <DynamicField
+          type="textarea"
+          name="unfair_advantages"
+          label="Unfair Advantages & Competitive Edge"
+          value={formData.unfair_advantages}
+          onChange={handleChange}
+          error={errors.unfair_advantages}
+          placeholder="Describe what makes your business model difficult to copy or compete with..."
+          colWidth={12}
+        />
+      </div>
+    </div>
+  </section>
 );
