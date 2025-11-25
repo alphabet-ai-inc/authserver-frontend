@@ -1,4 +1,5 @@
 import DynamicField from "./DynamicField.jsx";
+import { CUSTOMER_SEGMENTS } from "../../../config/selectOptions.js";
 
 export const BusinessModel = ({ formData, handleChange, errors }) => (
   <section className="form-section card mb-4 border-0 shadow-sm">
@@ -20,7 +21,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="revenue_streams"
           label="Revenue Streams"
           value={formData.revenue_streams}
-          onChange={handleChange}
           error={errors.revenue_streams}
           placeholder="Subscription, License, Advertising, Partnerships..."
           colWidth={12}
@@ -28,18 +28,16 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
 
         {/* Customer Segments - Enhanced checkbox group */}
         <DynamicField
-          type="checkbox-group"
+          type="select"
           name="customer_segments"
           label="Customer Segments"
           value={formData.customer_segments}
-          onChange={handleChange}
           error={errors.customer_segments}
-          options={[
-            { value: 'high', label: 'High Value Customers' },
-            { value: 'medium', label: 'Medium Value Customers' },
-            { value: 'low', label: 'Low Value Customers' }
-          ]}
+          options={ CUSTOMER_SEGMENTS}
+          multiple={true}
+          required={false}
           colWidth={12}
+          placeholder="Select one or more customer segments"
         />
 
         {/* Channels - Enhanced checkbox group */}
@@ -48,7 +46,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="channels"
           label="Distribution Channels"
           value={formData.channels}
-          onChange={handleChange}
           error={errors.channels}
           options={[
             { value: 'social', label: 'Social Media' },
@@ -66,7 +63,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="value_propositions"
           label="Value Propositions"
           value={formData.value_propositions}
-          onChange={handleChange}
           error={errors.value_propositions}
           placeholder="Describe the unique value your application provides to customers..."
           colWidth={12}
@@ -78,7 +74,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="pricing_tiers"
           label="Pricing Tiers"
           value={formData.pricing_tiers}
-          onChange={handleChange}
           error={errors.pricing_tiers}
           options={[
             { value: 'free', label: 'Free Tier' },
@@ -96,7 +91,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="partnerships"
           label="Strategic Partnerships"
           value={formData.partnerships}
-          onChange={handleChange}
           error={errors.partnerships}
           placeholder="Partner A, Partner B, Partner C..."
           colWidth={12}
@@ -108,7 +102,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="cost_structure"
           label="Cost Structure"
           value={formData.cost_structure}
-          onChange={handleChange}
           error={errors.cost_structure}
           placeholder="Development, Marketing, Infrastructure, Support..."
           colWidth={12}
@@ -120,7 +113,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="customer_relationships"
           label="Customer Relationships"
           value={formData.customer_relationships}
-          onChange={handleChange}
           error={errors.customer_relationships}
           placeholder="Self-service, Personal assistance, Automated support..."
           colWidth={12}
@@ -132,7 +124,6 @@ export const BusinessModel = ({ formData, handleChange, errors }) => (
           name="unfair_advantages"
           label="Unfair Advantages & Competitive Edge"
           value={formData.unfair_advantages}
-          onChange={handleChange}
           error={errors.unfair_advantages}
           placeholder="Describe what makes your business model difficult to copy or compete with..."
           colWidth={12}

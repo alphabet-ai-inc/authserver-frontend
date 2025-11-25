@@ -26,7 +26,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="textarea"
           name="roadmap"
           label="Development Roadmap"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.roadmap}
           error={errors.roadmap}
           placeholder="Describe your development timeline, upcoming features, and future plans..."
@@ -38,7 +38,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="version_control"
           label="Version Control & Tools"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.version_control}
           error={errors.version_control}
           placeholder="Git, GitHub, GitLab, Bitbucket, SVN..."
@@ -49,7 +49,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="key_activities"
           label="Key Development Activities"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.key_activities}
           error={errors.key_activities}
           placeholder="Code reviews, CI/CD, Testing, Documentation..."
@@ -68,7 +68,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="number"
           name="average_response_time"
           label="Average Response Time (ms)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.average_response_time}
           error={errors.average_response_time}
           placeholder="Milliseconds"
@@ -81,7 +81,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="number"
           name="uptime_percentage"
           label="Uptime Percentage (%)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.uptime_percentage}
           error={errors.uptime_percentage}
           placeholder="0-100"
@@ -95,7 +95,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="number"
           name="error_rate"
           label="Error Rate (%)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.error_rate}
           error={errors.error_rate}
           placeholder="0-100"
@@ -117,7 +117,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="frontend_technologies"
           label="Frontend Technologies"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.frontend_technologies}
           error={errors.frontend_technologies}
           placeholder="React, Vue, Angular, HTML5, CSS3..."
@@ -128,7 +128,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="backend_technologies"
           label="Backend Technologies"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.backend_technologies}
           error={errors.backend_technologies}
           placeholder="Node.js, Python, Java, .NET, PHP..."
@@ -139,7 +139,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="database_technologies"
           label="Database Technologies"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.database_technologies}
           error={errors.database_technologies}
           placeholder="MySQL, PostgreSQL, MongoDB, Redis..."
@@ -150,7 +150,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="array"
           name="infrastructure_tools"
           label="Infrastructure & DevOps"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.infrastructure_tools}
           error={errors.infrastructure_tools}
           placeholder="Docker, Kubernetes, AWS, Azure, Jenkins..."
@@ -161,7 +161,7 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
           type="textarea"
           name="deployment_process"
           label="Deployment Process"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.deployment_process}
           error={errors.deployment_process}
           placeholder="Describe your deployment strategy, environments, and release process..."

@@ -26,7 +26,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="active_users"
           label="Active Users"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.active_users}
           error={errors.active_users}
           placeholder="Enter total number of active users"
@@ -37,7 +37,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="user_retention_rate"
           label="User Retention Rate (%)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.user_retention_rate}
           error={errors.user_retention_rate}
           placeholder="0-100"
@@ -51,7 +51,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="churn_rate"
           label="Churn Rate (%)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.churn_rate}
           error={errors.churn_rate}
           placeholder="0-100"
@@ -65,7 +65,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="array"
           name="user_feedback"
           label="User Feedback"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.user_feedback}
           error={errors.user_feedback}
           placeholder="Positive reviews, Common complaints, Feature requests..."
@@ -84,7 +84,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="user_acquisition_cost"
           label="User Acquisition Cost ($)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.user_acquisition_cost}
           error={errors.user_acquisition_cost}
           placeholder="Average cost per user"
@@ -97,7 +97,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="monthly_recurring_revenue"
           label="Monthly Recurring Revenue ($)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.monthly_recurring_revenue}
           error={errors.monthly_recurring_revenue}
           placeholder="Total MRR"
@@ -118,7 +118,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="array"
           name="key_metrics"
           label="Key Metrics Tracked"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.key_metrics}
           error={errors.key_metrics}
           placeholder="Daily active users, Conversion rate, Customer lifetime value..."
@@ -130,7 +130,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="conversion_rate"
           label="Conversion Rate (%)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.conversion_rate}
           error={errors.conversion_rate}
           placeholder="0-100"
@@ -144,7 +144,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="number"
           name="avg_session_duration"
           label="Average Session Duration (minutes)"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.avg_session_duration}
           error={errors.avg_session_duration}
           placeholder="Average time per session"
@@ -157,7 +157,7 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
           type="textarea"
           name="performance_insights"
           label="Performance Insights"
-          onChange={handleChange}
+          // onChange={handleChange}
           value={formData.performance_insights}
           error={errors.performance_insights}
           placeholder="Key observations and trends from your analytics data..."

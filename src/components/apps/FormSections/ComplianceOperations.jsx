@@ -27,7 +27,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="textarea"
             name="backup_recovery_options"
             label="Backup & Recovery Procedures"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.backup_recovery_options}
             error={errors.backup_recovery_options}
             placeholder="Describe your data backup frequency, recovery procedures, and disaster recovery plans..."
@@ -39,7 +39,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="text"
             name="data_backup_location"
             label="Data Backup Location"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.data_backup_location}
             error={errors.data_backup_location}
             placeholder="e.g., AWS S3, Google Cloud Storage, On-premise servers..."
@@ -58,7 +58,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="array"
             name="localization_support"
             label="Localization & Language Support"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.localization_support}
             error={errors.localization_support}
             placeholder="English, Spanish, French, German, Japanese..."
@@ -69,7 +69,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="array"
             name="accessibility_features"
             label="Accessibility Features"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.accessibility_features}
             error={errors.accessibility_features}
             placeholder="Screen reader support, Keyboard navigation, High contrast mode..."
@@ -88,7 +88,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="textarea"
             name="team_structure"
             label="Team Structure & Responsibilities"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.team_structure}
             error={errors.team_structure}
             placeholder="Describe your team organization, roles, and operational responsibilities..."
@@ -101,7 +101,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="array"
             name="compliance_standards"
             label="Compliance Standards"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.compliance_standards}
             error={errors.compliance_standards}
             placeholder="GDPR, HIPAA, SOC2, PCI-DSS, ISO 27001..."
@@ -112,7 +112,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="textarea"
             name="security_protocols"
             label="Security Protocols"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.security_protocols}
             error={errors.security_protocols}
             placeholder="Describe your security measures, encryption standards, and access controls..."
@@ -124,7 +124,7 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
             type="array"
             name="supported_regions"
             label="Supported Regions/Countries"
-            onChange={handleChange}
+            // onChange={handleChange}
             value={formData.supported_regions}
             error={errors.supported_regions}
             placeholder="United States, European Union, Canada, Australia..."

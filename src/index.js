@@ -5,6 +5,7 @@ import { App } from './App';
 import { ErrorPage } from './components/ErrorPage';
 import { Home } from './components/Home';
 import { Apps } from './components/Apps';
+import { About } from './components/About';
 import { Databases } from './components/Databases';
 import { Roles } from './components/Roles';
 import { Users } from './components/Users';
@@ -39,6 +40,7 @@ root.render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/apps" element={<Apps />} />
+          <Route path="/about" element={<About />} />
           <Route path="/errorPage" element={<ErrorPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/databases" element={<Databases />} />

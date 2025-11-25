@@ -1,5 +1,6 @@
 import DynamicField from "./DynamicField.jsx";
-
+import { PLATFORMS } from "../../../config/selectOptions.js";
+import { LICENSE_TYPES } from "../../../config/selectOptions.js";
 export const GeneralInformation = ({
   formData,
   handleChange,
@@ -32,7 +33,6 @@ export const GeneralInformation = ({
           name="id"
           label="Application ID"
           value={formData.id}
-          onChange={handleChange}
           error={errors.id}
           colWidth={6}
           disabled
@@ -44,7 +44,6 @@ export const GeneralInformation = ({
           name="name"
           label="Application Name"
           value={formData.name}
-          onChange={handleChange}
           error={errors.name}
           placeholder="Enter your application name"
           required
@@ -57,7 +56,6 @@ export const GeneralInformation = ({
           label="Release Version"
           options={releaseOptions}
           value={formData.release}
-          onChange={handleChange}
           error={errors.release}
           placeholder="Select release version"
           required
@@ -69,7 +67,6 @@ export const GeneralInformation = ({
           name="category"
           label="Category"
           value={formData.category}
-          onChange={handleChange}
           error={errors.category}
           placeholder="e.g., Productivity, Finance, Social Media"
           colWidth={6}
@@ -88,7 +85,6 @@ export const GeneralInformation = ({
           name="title"
           label="Application Title"
           value={formData.title}
-          onChange={handleChange}
           error={errors.title}
           placeholder="Official display title"
           colWidth={12}
@@ -99,7 +95,6 @@ export const GeneralInformation = ({
           name="description"
           label="Description"
           value={formData.description}
-          onChange={handleChange}
           error={errors.description}
           placeholder="Describe your application's purpose and main features..."
           rows={3}
@@ -111,7 +106,6 @@ export const GeneralInformation = ({
           name="positioning_stmt"
           label="Positioning Statement"
           value={formData.positioning_stmt}
-          onChange={handleChange}
           error={errors.positioning_stmt}
           placeholder="Brief statement that positions your application in the market..."
           rows={2}
@@ -127,13 +121,15 @@ export const GeneralInformation = ({
         </div>
 
         <DynamicField
-          type="array"
+          type="select"
           name="platform"
           label="Supported Platforms"
           value={formData.platform}
-          onChange={handleChange}
           error={errors.platform}
-          placeholder="Web, iOS, Android, Windows, macOS, Linux..."
+          options={ PLATFORMS }
+          multiple={true}
+          required={false}
+          placeholder="Select one or more platforms"
           colWidth={6}
         />
 
@@ -142,7 +138,6 @@ export const GeneralInformation = ({
           name="size"
           label="Application Size (MB)"
           value={formData.size}
-          onChange={handleChange}
           error={errors.size}
           placeholder="File size in megabytes"
           min="0"
@@ -151,13 +146,15 @@ export const GeneralInformation = ({
         />
 
         <DynamicField
-          type="text"
+          type="select"
           name="license_type"
           label="License Type"
           value={formData.license_type}
-          onChange={handleChange}
           error={errors.license_type}
-          placeholder="e.g., MIT, GPL, Commercial, Proprietary"
+          options={ LICENSE_TYPES }
+          multiple={false}
+          required={false}
+          placeholder="Select license type"
           colWidth={6}
         />
 
@@ -166,7 +163,6 @@ export const GeneralInformation = ({
           name="developer"
           label="Developer/Company"
           value={formData.developer}
-          onChange={handleChange}
           error={errors.developer}
           placeholder="Developer or company name"
           colWidth={6}
@@ -185,7 +181,6 @@ export const GeneralInformation = ({
           name="web"
           label="Website"
           value={formData.web}
-          onChange={handleChange}
           error={errors.web}
           placeholder="https://yourapp.com"
           colWidth={6}
@@ -196,7 +191,6 @@ export const GeneralInformation = ({
           name="url"
           label="Application URL"
           value={formData.url}
-          onChange={handleChange}
           error={errors.url}
           placeholder="https://app.yourapp.com"
           colWidth={6}
@@ -207,7 +201,6 @@ export const GeneralInformation = ({
           name="landing_page"
           label="Landing Page"
           value={formData.landing_page}
-          onChange={handleChange}
           error={errors.landing_page}
           placeholder="https://yourapp.com/landing"
           colWidth={12}
@@ -237,7 +230,6 @@ export const GeneralInformation = ({
           name="created"
           label="Creation Date"
           value={formData.created}
-          onChange={handleChange}
           error={errors.created}
           readOnly
           colWidth={6}
@@ -248,7 +240,6 @@ export const GeneralInformation = ({
           name="updated"
           label="Last Updated"
           value={formData.updated}
-          onChange={handleChange}
           error={errors.updated}
           readOnly
           colWidth={6}

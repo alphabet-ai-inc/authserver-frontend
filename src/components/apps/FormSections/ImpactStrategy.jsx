@@ -27,7 +27,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="social_impact"
           label="Social Impact & Responsibility"
           value={formData.social_impact}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.social_impact}
           placeholder="Describe how your application benefits society, communities, or specific groups..."
           rows={4}
@@ -39,7 +39,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="environmental_impact"
           label="Environmental Impact & Sustainability"
           value={formData.environmental_impact}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.environmental_impact}
           placeholder="Describe your environmental initiatives, carbon footprint reduction, or sustainability practices..."
           rows={4}
@@ -59,7 +59,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="funding_investment"
           label="Funding & Investment ($)"
           value={formData.funding_investment}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.funding_investment}
           placeholder="Total funding received to date"
           min="0"
@@ -72,7 +72,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="exit_strategy"
           label="Exit Strategy & Long-term Vision"
           value={formData.exit_strategy}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.exit_strategy}
           placeholder="Describe your long-term business goals, acquisition strategy, or IPO plans..."
           rows={3}
@@ -92,7 +92,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="intellectual_property"
           label="Intellectual Property Strategy"
           value={formData.intellectual_property}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.intellectual_property}
           placeholder="Describe your patents, trademarks, copyrights, or IP protection strategy..."
           rows={3}
@@ -112,7 +112,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="analytics_tools"
           label="Analytics & Monitoring Tools"
           value={formData.analytics_tools}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.analytics_tools}
           placeholder="Google Analytics, Mixpanel, Amplitude, Hotjar, Custom dashboards..."
           colWidth={12}
@@ -124,7 +124,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="key_partnerships"
           label="Strategic Partnerships"
           value={formData.key_partnerships}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.key_partnerships}
           placeholder="Industry partners, technology providers, distribution partners..."
           colWidth={6}
@@ -135,7 +135,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="competitive_advantage"
           label="Competitive Advantage"
           value={formData.competitive_advantage}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.competitive_advantage}
           placeholder="What makes your strategy unique and difficult to replicate?"
           rows={3}
@@ -147,7 +147,7 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
           name="risk_assessment"
           label="Risk Assessment & Mitigation"
           value={formData.risk_assessment}
-          onChange={handleChange}
+          // onChange={handleChange}
           error={errors.risk_assessment}
           placeholder="Identify potential risks and your strategies to mitigate them..."
           rows={3}
