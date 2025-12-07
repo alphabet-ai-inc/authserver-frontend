@@ -219,11 +219,23 @@ export const GeneralInformation = ({
           name="logo"
           label="Application Logo"
           accept="image/*"
-          value={formData.logo}
+          // value={formData.logo}
           onChange={handleChange}
           error={errors.logo}
           colWidth={6}
         />
+
+        {formData.logo && typeof formData.logo === 'string' && formData.logo.startsWith('http') && (
+          <div className="mb-2">
+            <small>Current logo:</small>
+            <img
+              src={formData.logo}
+              alt="Current logo"
+              style={{maxWidth: '100px', maxHeight: '100px'}}
+              className="img-thumbnail"
+            />
+          </div>
+        )}
 
         <DynamicField
           type="date"

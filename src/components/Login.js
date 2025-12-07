@@ -72,7 +72,7 @@ const Login = () => {
 
         try {
             // Option 1: Use your existing fetch approach
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/authenticate`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/authenticate`, requestOptions);
             const data = await response.json();
 
             if (!response.ok || data.error) {

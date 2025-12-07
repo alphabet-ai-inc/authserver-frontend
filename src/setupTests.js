@@ -34,3 +34,29 @@ jest.mock('axios', () => ({
     }
   }
 }));
+
+// Mock fetch API for AppFormHandlers tests (ADD THIS)
+global.fetch = jest.fn();
+
+// Mock console.error to keep test output clean (ADD THIS)
+global.console.error = jest.fn();
+
+// Mock matchMedia for any component tests (ADD THIS)
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
+// Clear all mocks after each test (ADD THIS)
+afterEach(() => {
+  jest.clearAllMocks();
+});

@@ -13,8 +13,10 @@ const DynamicField = ({
   multiple,
   onChange,
   placeholder,
+  id,
   ...props
 }) => {
+  const fieldId = id || name;
   const [fieldError, setFieldError] = useState(null);
   const [internalValue, setInternalValue] = useState(value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -247,6 +249,7 @@ const DynamicField = ({
     const displayValue = getDisplayValue();
 
     const commonProps = {
+      id: fieldId,
       name,
       onChange: handleChange,
       onBlur: handleBlur,
@@ -292,6 +295,7 @@ const DynamicField = ({
                     <input
                       className={checkboxClassName}
                       type="checkbox"
+                      id={`${fieldId}-${opt.value}`}
                       name={name}
                       value={opt.value}
                       checked={Array.isArray(internalValue) && internalValue.includes(opt.value)}
@@ -365,8 +369,9 @@ const DynamicField = ({
   };
 
   return (
+
     <div className={`col-md-${colWidth} mb-4`}>
-      <label className="form-label fw-semibold">
+      <label htmlFor={fieldId} className="form-label fw-semibold"> {/* Add htmlFor */}
         {label}
         {required && <span className="text-danger ms-1">*</span>}
       </label>

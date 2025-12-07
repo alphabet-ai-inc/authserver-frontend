@@ -47,5 +47,11 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "J Passano",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "babel-jest": "^30.2.0"
+  }
 }
