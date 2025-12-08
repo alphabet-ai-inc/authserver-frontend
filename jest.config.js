@@ -1,6 +1,10 @@
 // jest.config.js
 module.exports = {
   testEnvironment: 'jsdom',
+    testEnvironmentOptions: {
+    customExportConditions: [],
+  },
+
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'], // This should already point to your file
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -25,3 +29,4 @@ module.exports = {
     }
   }
 };
+

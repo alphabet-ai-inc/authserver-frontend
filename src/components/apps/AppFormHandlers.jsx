@@ -1,5 +1,5 @@
 // src/components/apps/AppFormHandlers.jsx
-import { handleError } from "../../utils/fetchHandling";
+import { handleError } from "../../utils/FetchHandling";
 
 /**
  * Fetches release options from backend

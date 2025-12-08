@@ -9,13 +9,13 @@ import {
   fetchAllApps
 } from '../AppFormHandlers.jsx';
 
-import { handleError } from '../../../utils/fetchHandling.js';
+import { handleError } from '../../../utils/FetchHandling.js';
 // Mock the fetch API
 global.fetch = jest.fn();
 global.console.error = jest.fn();
 
 // Mock handleError
-jest.mock('../../../utils/fetchHandling', () => ({
+jest.mock('../../../utils/FetchHandling', () => ({
   handleError: jest.fn()
 }));
 

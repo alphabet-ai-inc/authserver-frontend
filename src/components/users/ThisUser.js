@@ -78,12 +78,12 @@ const StatusIndicator = ({ user }) => (
   <div className="d-flex gap-2 flex-wrap">
     <span className={`badge ${user.active ? 'bg-success' : 'bg-secondary'} bg-opacity-25 text-dark`}>
       <i className={`bi ${user.active ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-secondary'} me-1`}></i>
-      {user.active ? 'Active' : 'Inactive'}
+      data-testid={user.active ? "status-active" : "status-inactive"}
     </span>
     {user.blocked && (
       <span className="badge bg-danger bg-opacity-25 text-dark">
         <i className="bi bi-slash-circle-fill text-danger me-1"></i>
-        Blocked
+        data-testid="status-blocked"
       </span>
     )}
     <span className="badge bg-info bg-opacity-25 text-dark">

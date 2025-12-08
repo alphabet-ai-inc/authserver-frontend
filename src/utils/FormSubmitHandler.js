@@ -1,195 +1,37 @@
-// src/utils/formSubmitHandler.js
+// src/utils/FormSubmitHandler.js
 
 /**
- * Generic form submission handler for any entity
- * @param {Object} options - Configuration options
- * @param {Event} options.event - Form submit event
- * @param {string} options.formId - ID of the form element
- * @param {Object} options.existingData - Existing data (for updates)
- * @param {number} options.entityId - Entity ID (0 for create, >0 for update)
- * @param {Function} options.validateFn - Validation function
- * @param {Function} options.convertFn - Data conversion function
- * @param {Function} options.submitFn - API submission function
- * @param {Function} options.onSuccess - Success callback
- * @param {Function} options.onError - Error callback
- * @param {Array} options.fileFields - List of file field names
- * @param {Array} options.ignoreFields - Fields to ignore
- * @returns {Promise<Object>} - Result of submission
+ * Converts a file to base64 string
+ * @param {File} file - The file to convert
+ * @returns {Promise<string>} - Base64 encoded string
  */
-export const handleGenericFormSubmit = async ({
-  event,
-  formId,
-  existingData = {},
-  entityId = 0,
-  validateFn,
-  convertFn,
-  submitFn,
-  onSuccess,
-  onError,
-  fileFields = ['logo', 'image', 'thumbnail', 'icon', 'avatar', 'photo', 'picture'],
-  ignoreFields = ['csrf_token', '_method', 'submit']
-}) => {
-  if (event) event.preventDefault();
-
-  try {
-    // 1. Get form values
-    const formElement = document.getElementById(formId);
-    if (!formElement) {
-      throw new Error(`Form with id "${formId}" not found`);
-    }
-
-    const formValues = extractFormValues(formElement, fileFields, ignoreFields, existingData);
-
-    // 2. Merge with existing data
-    const submissionData = {
-      ...existingData,
-      ...formValues
-    };
-
-    // 3. Clean data (handle empty objects, etc.)
-    const cleanedData = cleanSubmissionData(submissionData, fileFields);
-
-    // 4. Add entity ID for updates
-    if (entityId !== 0) {
-      cleanedData.id = entityId;
-    }
-
-    console.log(`Submitting ${formId} data:`, cleanedData);
-
-    // 5. Validate (if validation function provided)
-    let validationErrors = {};
-    if (validateFn && typeof validateFn === 'function') {
-      validationErrors = validateFn(cleanedData);
-
-      if (Object.keys(validationErrors).length > 0) {
-      const error = new Error('Form validation failed');
-      error.name = 'ValidationError';
-      error.errors = validationErrors;
-      throw error;
-        }
-    }
-
-    // 6. Convert data for API (if conversion function provided)
-    let apiData = cleanedData;
-    if (convertFn && typeof convertFn === 'function') {
-      apiData = convertFn(cleanedData, entityId === 0);
-    }
-
-    // 7. Submit to API
-    const result = await submitFn(apiData, entityId);
-
-    // 8. Handle success
-    if (onSuccess && typeof onSuccess === 'function') {
-      await onSuccess(result, cleanedData);
-    }
-
-    return {
-      success: true,
-      data: result,
-      submittedData: cleanedData
-    };
-
-  } catch (error) {
-    console.error('Form submission error:', error);
-
-    // Handle validation errors specially
-    if (error.name === 'ValidationError') {
-      if (onError && typeof onError === 'function') {
-        await onError(error.message, error.errors);
-      }
-      return {
-        success: false,
-        error: error.message,
-        validationErrors: error.errors
-      };
-    }
-
-    // Handle other errors
-    if (onError && typeof onError === 'function') {
-      await onError(error.message || 'An error occurred');
-    }
-
-    return {
-      success: false,
-      error: error.message
-    };
-  }
+export const fileToBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 };
 
 /**
- * Extract values from form, handling files specially
- */
-const extractFormValues = (formElement, fileFields, ignoreFields, existingData) => {
-  const formValues = {};
-  const formDataObj = new FormData(formElement);
-
-  // First, handle non-file, non-ignored fields
-  for (let [key, value] of formDataObj.entries()) {
-    if (ignoreFields.includes(key)) continue;
-    if (fileFields.includes(key)) continue;
-    formValues[key] = value;
-  }
-
-  // Handle file fields
-  const fileInputs = formElement.querySelectorAll('input[type="file"]');
-  fileInputs.forEach(input => {
-    if (fileFields.includes(input.name)) {
-      if (input.files.length > 0) {
-        // New file selected
-        formValues[input.name] = input.files[0];
-      } else if (existingData[input.name] && typeof existingData[input.name] === 'string') {
-        // Keep existing file URL
-        formValues[input.name] = existingData[input.name];
-      } else {
-        // No file
-        formValues[input.name] = null;
-      }
-    }
-  });
-
-  return formValues;
-};
-
-/**
- * Clean submission data (remove empty objects, etc.)
- */
-const cleanSubmissionData = (data, fileFields) => {
-  const cleaned = { ...data };
-
-  // Clean file fields
-  fileFields.forEach(field => {
-    if (cleaned[field] &&
-        typeof cleaned[field] === 'object' &&
-        !(cleaned[field] instanceof File) &&
-        !(cleaned[field] instanceof Blob) &&
-        Object.keys(cleaned[field]).length === 0) {
-      cleaned[field] = null;
-    }
-  });
-
-  // Clean empty strings (optional)
-  Object.keys(cleaned).forEach(key => {
-    if (cleaned[key] === '') {
-      cleaned[key] = null;
-    }
-  });
-
-  return cleaned;
-};
-
-/**
- * Helper to handle file uploads separately
+ * Uploads a file to the server
+ * @param {File} file - The file to upload
+ * @param {string} endpoint - API endpoint
+ * @param {string} token - Authentication token
+ * @param {string} fieldName - FormData field name (default: 'file')
+ * @returns {Promise<Object>} - Server response
  */
 export const uploadFile = async (file, endpoint, token, fieldName = 'file') => {
   const formData = new FormData();
   formData.append(fieldName, file);
 
-  const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
+  const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || ''}${endpoint}`, {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
     },
-    body: formData
+    body: formData,
   });
 
   if (!response.ok) {
@@ -200,27 +42,145 @@ export const uploadFile = async (file, endpoint, token, fieldName = 'file') => {
 };
 
 /**
- * Convert File to Base64 (for small files in JSON)
+ * Scrolls to the first field with validation error
+ * @param {Object} errors - Validation errors object
  */
-export const fileToBase64 = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
+export const scrollToFirstError = (errors) => {
+  if (!errors || typeof errors !== 'object') {
+    return;
+  }
+
+  const firstErrorField = Object.keys(errors)[0];
+  if (!firstErrorField) {
+    return;
+  }
+
+  const errorElement = document.getElementById(firstErrorField) ||
+                       document.querySelector(`[name="${firstErrorField}"]`);
+
+  if (errorElement) {
+    errorElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
+  }
 };
 
 /**
- * Scroll to first validation error
+ * Handles generic form submission with validation, conversion, and error handling
+ * @param {Object} options - Configuration options
+ * @param {Event} options.event - Form submit event
+ * @param {string} options.formId - Form element ID
+ * @param {Function} options.submitFn - Function to submit data to API
+ * @param {Function} [options.validateFn] - Function to validate form data
+ * @param {Function} [options.convertFn] - Function to convert form data before submission
+ * @param {Function} [options.onSuccess] - Callback on successful submission
+ * @param {Function} [options.onError] - Callback on error
+ * @param {string|number} [options.entityId] - Entity ID for update operations
+ * @returns {Promise<Object>} - Result object {success, data, validationErrors, error}
  */
-export const scrollToFirstError = (errors) => {
-  const firstErrorField = Object.keys(errors)[0];
-  if (firstErrorField) {
-    const element = document.querySelector(`[name="${firstErrorField}"]`);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      element.focus();
+export const handleGenericFormSubmit = async ({
+  event,
+  formId,
+  submitFn,
+  validateFn,
+  convertFn,
+  onSuccess,
+  onError,
+  entityId = null,
+}) => {
+  try {
+    // Prevent default form submission
+    if (event?.preventDefault) {
+      event.preventDefault();
     }
+
+    // Get form element
+    const formElement = document.getElementById(formId);
+    if (!formElement) {
+      throw new Error(`Form with ID "${formId}" not found`);
+    }
+
+    // Extract form data
+    let formDataObj;
+    try {
+      const formData = new FormData(formElement);
+      formDataObj = Object.fromEntries(formData.entries());
+    } catch (error) {
+      throw new Error(`Failed to extract form data: ${error.message}`);
+    }
+
+    // Call validation function if provided
+    let validationErrors = {};
+    if (validateFn && typeof validateFn === 'function') {
+      validationErrors = validateFn(formDataObj) || {};
+    }
+
+    // If there are validation errors, return them
+    if (validationErrors && Object.keys(validationErrors).length > 0) {
+      const errorMessage = 'Form validation failed';
+      if (onError && typeof onError === 'function') {
+        onError(errorMessage, validationErrors);
+      }
+      scrollToFirstError(validationErrors);
+      return {
+        success: false,
+        validationErrors,
+        error: errorMessage,
+      };
+    }
+
+    // Handle file fields if present
+    const fileInputs = formElement.querySelectorAll('input[type="file"]');
+    for (const input of fileInputs) {
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
+        const base64 = await fileToBase64(file);
+        formDataObj[input.name] = base64;
+      } else if (formDataObj[input.name] === '' || formDataObj[input.name] === undefined) {
+        // Remove empty file fields to avoid sending empty strings
+        delete formDataObj[input.name];
+      }
+    }
+
+    // Apply conversion function if provided
+    let convertedData = formDataObj;
+    if (convertFn && typeof convertFn === 'function') {
+      convertedData = convertFn(formDataObj, !!entityId) || formDataObj;
+    }
+
+    // Add entity ID for update operations
+    if (entityId) {
+      convertedData = { ...convertedData, id: entityId };
+    }
+
+    // Call submit function
+    if (!submitFn || typeof submitFn !== 'function') {
+      throw new Error('Submit function is required');
+    }
+
+    const response = await submitFn(convertedData);
+
+    // Call success callback
+    if (onSuccess && typeof onSuccess === 'function') {
+      onSuccess(response);
+    }
+
+    return {
+      success: true,
+      data: response,
+    };
+  } catch (error) {
+    // Handle errors
+    const errorMessage = error.message || 'An unknown error occurred';
+
+    if (onError && typeof onError === 'function') {
+      onError(errorMessage);
+    }
+
+    return {
+      success: false,
+      error: errorMessage,
+    };
   }
 };

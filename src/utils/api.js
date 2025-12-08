@@ -17,7 +17,8 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Check if it's a 401 error AND has a response object
+    if (error.response && error.response.status === 401) {
       // Use the auth context if available
       if (authContextRef?.handleSessionExpiry) {
         authContextRef.handleSessionExpiry();
