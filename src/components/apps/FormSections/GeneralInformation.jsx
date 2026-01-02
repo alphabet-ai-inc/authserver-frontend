@@ -1,4 +1,4 @@
-import DynamicField from "./DynamicField.jsx";
+import DynamicField from "../../DynamicField.jsx";
 import { PLATFORMS } from "../../../config/selectOptions.js";
 import { LICENSE_TYPES } from "../../../config/selectOptions.js";
 export const GeneralInformation = ({
@@ -20,7 +20,6 @@ export const GeneralInformation = ({
 
     <div className="card-body">
       <div className="row g-4">
-        {/* Application Identification */}
         <div className="col-12">
           <h6 className="border-bottom pb-2 mb-3 text-muted">
             <i className="bi bi-tag me-2"></i>

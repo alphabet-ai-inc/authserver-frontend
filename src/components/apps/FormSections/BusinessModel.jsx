@@ -1,7 +1,7 @@
-import DynamicField from "./DynamicField.jsx";
+import DynamicField from "../../DynamicField.jsx";
 import { CUSTOMER_SEGMENTS } from "../../../config/selectOptions.js";
 
-export const BusinessModel = ({ formData, handleChange, errors }) => (
+export const BusinessModel = ({ formData, errors }) => (
   <section className="form-section card mb-4 border-0 shadow-sm">
     <div className="card-header bg-light border-0">
       <h4 className="card-title mb-0">

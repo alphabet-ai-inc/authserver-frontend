@@ -422,14 +422,14 @@ const EditApp = () => {
         </div>
 
         {/* Debug info (development only) */}
-        {process.env.NODE_ENV === 'development' && (
+        {/* {process.env.NODE_ENV === 'development' && (
           <div className="mt-3 p-3 border rounded bg-light">
             <small className="text-muted">
               <i className="bi bi-bug me-1"></i>
               Debug: App ID: {appId} | Loading: {loading.toString()} | Submitting: {isSubmitting.toString()}
             </small>
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

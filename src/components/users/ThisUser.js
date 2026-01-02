@@ -194,7 +194,7 @@ const ThisUser = () => {
       headers: headers,
     };
 
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}`, requestOptions)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/users/${id}`, requestOptions)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

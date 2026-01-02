@@ -1,4 +1,4 @@
-import DynamicField from "./DynamicField.jsx";
+import DynamicField from "../../DynamicField.jsx";
 
 export const ImpactStrategy = ({ formData, handleChange, errors }) => (
   <section className="form-section card mb-4 border-0 shadow-sm">

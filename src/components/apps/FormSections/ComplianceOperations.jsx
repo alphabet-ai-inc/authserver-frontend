@@ -1,4 +1,4 @@
-import DynamicField from './DynamicField.jsx';
+import DynamicField from '../../DynamicField.jsx';
 
 export const ComplianceOperations = ({ formData, handleChange, errors }) => {
   return (

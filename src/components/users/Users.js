@@ -155,12 +155,12 @@ const Users = () => {
             };
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users`, requestOptions);
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/users`, requestOptions);
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-
                 if (Array.isArray(data)) {
                     setUsers(data);
                     setFilteredUsers(data);
