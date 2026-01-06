@@ -2,20 +2,20 @@ name: Deploy to Development Environment
 
 on:
   # THIS IS FOR TESTING!!!
-  # push:
-    # branches: [ dev-add_merge_workflow ]  # Temporarily for testing - launch on any push to main
+  push:
+    branches: [ main ]  # Temporarily for testing - launch on any push to main
   # THIS IS FOR PROD
-  pull_request:
-    types: [closed]
-    branches: [ main ]
+  # pull_request:
+  #   types: [closed]
+  #   branches: [ main ]
 
 jobs:
   deploy:
     name: Deploy Application
     runs-on: ubuntu-latest
     
-    # Condition to run on merge (comment for testing)
-    if: github.event.pull_request.merged == true
+    # Condition to run on merge (commented out for testing)
+    # if: github.event.pull_request.merged == true
     
     steps:
     - name: Checkout code
