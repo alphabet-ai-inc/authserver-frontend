@@ -23,14 +23,14 @@ export const UserPermissions = () => {
     const fetchData = async () => {
       try {
         // Fetch user info
-        const userResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}`, {
+        const userResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, {
           headers: { Authorization: `Bearer ${jwtToken}` }
         });
         const userData = await userResponse.json();
         setUserInfo(userData);
 
         // Fetch permissions
-        const permResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}/permissions`, {
+        const permResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/permissions`, {
           headers: { Authorization: `Bearer ${jwtToken}` }
         });
         const permData = await permResponse.json();
@@ -55,7 +55,7 @@ export const UserPermissions = () => {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}/permissions`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/permissions`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${jwtToken}`,

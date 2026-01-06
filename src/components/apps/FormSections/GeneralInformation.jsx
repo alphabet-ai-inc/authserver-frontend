@@ -259,3 +259,4 @@ export const GeneralInformation = ({
     </div>
   </section>
 );
+export default GeneralInformation;

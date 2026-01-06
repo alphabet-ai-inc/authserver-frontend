@@ -177,3 +177,4 @@ export const TechnicalSpecifications = ({
     </div>
   </section>
 );
+export default TechnicalSpecifications;

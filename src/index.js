@@ -91,7 +91,7 @@ const routeConfig = {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider backendUrl={process.env.REACT_APP_BACKEND_URL}>
+    <AuthProvider backendUrl={import.meta.env.VITE_BACKEND_URL}>
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}

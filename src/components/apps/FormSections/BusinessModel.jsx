@@ -132,3 +132,4 @@ export const BusinessModel = ({ formData, errors }) => (
     </div>
   </section>
 );
+export default BusinessModel;

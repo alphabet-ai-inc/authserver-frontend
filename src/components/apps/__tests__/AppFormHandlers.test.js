@@ -10,13 +10,15 @@ import {
 } from '../AppFormHandlers.jsx';
 
 import { handleError } from '../../../utils/FetchHandling.js';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+
 // Mock the fetch API
-global.fetch = jest.fn();
-global.console.error = jest.fn();
+global.fetch = vi.fn();
+global.console.error = vi.fn();
 
 // Mock handleError
-jest.mock('../../../utils/FetchHandling', () => ({
-  handleError: jest.fn()
+vi.mock('../../../utils/FetchHandling', () => ({
+  handleError: vi.fn()
 }));
 
 describe('AppFormHandlers', () => {
@@ -24,9 +26,11 @@ describe('AppFormHandlers', () => {
   const mockBackendUrl = 'http://localhost:5000/api';
 
   beforeEach(() => {
+    vi.clearAllMocks();
     fetch.mockClear();
     console.error.mockClear();
-    process.env.REACT_APP_BACKEND_URL = mockBackendUrl;
+    // Set environment variable
+    vi.stubEnv('VITE_BACKEND_URL', mockBackendUrl);
   });
 
   describe('fetchAppDetails', () => {
@@ -113,7 +117,12 @@ describe('AppFormHandlers', () => {
 
       expect(fetch).toHaveBeenCalledWith(
         `${mockBackendUrl}/admin/apps/new`,
-        expect.any(Object)
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            'Authorization': `Bearer ${mockJwtToken}`,
+            'Content-Type': 'application/json'
+          })
+        })
       );
 
       expect(result).toEqual(mockNewAppTemplate);
@@ -181,7 +190,10 @@ describe('AppFormHandlers', () => {
         `${mockBackendUrl}/admin/apps/123`,
         {
           method: 'PUT',
-          headers: expect.any(Object),
+          headers: expect.objectContaining({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${mockJwtToken}`
+          }),
           credentials: 'include',
           body: JSON.stringify(mockFormData)
         }
@@ -277,17 +289,13 @@ describe('AppFormHandlers', () => {
 
       const result = await uploadAppFile(mockFile, appId, fieldName, mockJwtToken);
 
-      const formData = new FormData();
-      formData.append('file', mockFile);
-      formData.append('app_id', appId.toString());
-      formData.append('field_name', fieldName);
-
       expect(fetch).toHaveBeenCalledWith(
         `${mockBackendUrl}/admin/apps/1/upload`,
         {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${mockJwtToken}`
+            // Note: No Content-Type header for FormData
           },
           credentials: 'include',
           body: expect.any(FormData)
@@ -295,6 +303,20 @@ describe('AppFormHandlers', () => {
       );
 
       expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle upload error', async () => {
+      const appId = 1;
+      const fieldName = 'logo';
+      const mockFile = new File(['test'], 'logo.png', { type: 'image/png' });
+
+      fetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        text: () => Promise.resolve('Upload failed')
+      });
+
+      await expect(uploadAppFile(mockFile, appId, fieldName, mockJwtToken)).rejects.toThrow('File upload failed: 500 - Upload failed');
     });
   });
 
@@ -347,6 +369,18 @@ describe('AppFormHandlers', () => {
 
       expect(result).toEqual(mockApp);
     });
+
+    it('should handle fetch error', async () => {
+      const appId = 1;
+
+      fetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        text: () => Promise.resolve('Not found')
+      });
+
+      await expect(fetchAppById(appId, mockJwtToken)).rejects.toThrow('Failed to fetch app: 404 - Not found');
+    });
   });
 
   describe('fetchAllApps', () => {
@@ -395,6 +429,16 @@ describe('AppFormHandlers', () => {
       );
 
       expect(result).toEqual(mockApps);
+    });
+
+    it('should handle fetch error', async () => {
+      fetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        text: () => Promise.resolve('Server error')
+      });
+
+      await expect(fetchAllApps(mockJwtToken, 'admin/apps')).rejects.toThrow('Failed to fetch apps: 500 - Server error');
     });
   });
 });

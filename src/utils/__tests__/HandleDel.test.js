@@ -3,37 +3,40 @@
 import { renderHook, act } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { useHandleDelete, quickDelete } from '../HandleDel';
 
 // Mock all dependencies
-jest.mock('react-router-dom', () => ({
-  useNavigate: jest.fn()
+vi.mock('react-router-dom', () => ({
+  useNavigate: vi.fn()
 }));
 
-jest.mock('../../context/AuthContext', () => ({
-  useAuth: jest.fn()
+vi.mock('../../context/AuthContext.jsx', () => ({
+  useAuth: vi.fn()
 }));
 
-jest.mock('sweetalert2', () => ({
-  fire: jest.fn(),
-  DismissReason: {
-    cancel: 'cancel'
-  },
-  isLoading: jest.fn()
+vi.mock('sweetalert2', () => ({
+  __esModule: true,
+  default: {
+    fire: vi.fn(),
+    DismissReason: {
+      cancel: 'cancel'
+    },
+    isLoading: vi.fn()
+  }
 }));
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 describe('useHandleDelete', () => {
   let mockNavigate;
   let mockJwtToken;
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
-    mockNavigate = jest.fn();
+    mockNavigate = vi.fn();
     mockJwtToken = 'test-jwt-token';
 
     useNavigate.mockReturnValue(mockNavigate);
@@ -84,7 +87,7 @@ describe('useHandleDelete', () => {
     });
 
     test('should have preConfirm function that calls delete endpoint', async () => {
-      const mockResponse = { ok: true, json: jest.fn().mockResolvedValue({}) };
+      const mockResponse = { ok: true, json: vi.fn().mockResolvedValue({}) };
       global.fetch.mockResolvedValue(mockResponse);
 
       let capturedPreConfirm;
@@ -120,7 +123,7 @@ describe('useHandleDelete', () => {
     test('should handle successful deletion', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue({ success: true })
+        json: vi.fn().mockResolvedValue({ success: true })
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -145,7 +148,7 @@ describe('useHandleDelete', () => {
     test('should navigate to success redirect on successful deletion', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue({ success: true })
+        json: vi.fn().mockResolvedValue({ success: true })
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -164,7 +167,7 @@ describe('useHandleDelete', () => {
       const mockError = { message: 'Not found' };
       const mockResponse = {
         ok: false,
-        json: jest.fn().mockResolvedValue(mockError)
+        json: vi.fn().mockResolvedValue(mockError)
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -267,7 +270,7 @@ describe('useHandleDelete', () => {
     test('should call batch delete endpoint', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue({ success: true })
+        json: vi.fn().mockResolvedValue({ success: true })
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -291,7 +294,7 @@ describe('useHandleDelete', () => {
     test('should handle batch delete success', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue({ success: true })
+        json: vi.fn().mockResolvedValue({ success: true })
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -315,7 +318,7 @@ describe('useHandleDelete', () => {
     test('should handle batch delete error', async () => {
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue({ error: true, message: 'Batch delete failed' })
+        json: vi.fn().mockResolvedValue({ error: true, message: 'Batch delete failed' })
       };
       global.fetch.mockResolvedValue(mockResponse);
 
@@ -383,19 +386,19 @@ describe('useHandleDelete', () => {
 
 describe('quickDelete', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.fetch.mockClear();
   });
 
   test('should successfully delete entity', async () => {
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue({ success: true })
+      json: vi.fn().mockResolvedValue({ success: true })
     };
     global.fetch.mockResolvedValue(mockResponse);
 
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
+    const onSuccess = vi.fn();
+    const onError = vi.fn();
 
     const result = await quickDelete('app', 123, 'test-token', onSuccess, onError);
 
@@ -414,12 +417,12 @@ describe('quickDelete', () => {
   test('should handle API error response', async () => {
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue({ error: true, message: 'Delete failed' })
+      json: vi.fn().mockResolvedValue({ error: true, message: 'Delete failed' })
     };
     global.fetch.mockResolvedValue(mockResponse);
 
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
+    const onSuccess = vi.fn();
+    const onError = vi.fn();
 
     const result = await quickDelete('app', 123, 'test-token', onSuccess, onError);
 
@@ -431,8 +434,8 @@ describe('quickDelete', () => {
   test('should handle network error', async () => {
     global.fetch.mockRejectedValue(new Error('Network error'));
 
-    const onSuccess = jest.fn();
-    const onError = jest.fn();
+    const onSuccess = vi.fn();
+    const onError = vi.fn();
 
     const result = await quickDelete('app', 123, 'test-token', onSuccess, onError);
 
@@ -444,7 +447,7 @@ describe('quickDelete', () => {
   test('should use default config for unknown entity type', async () => {
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue({ success: true })
+      json: vi.fn().mockResolvedValue({ success: true })
     };
     global.fetch.mockResolvedValue(mockResponse);
 

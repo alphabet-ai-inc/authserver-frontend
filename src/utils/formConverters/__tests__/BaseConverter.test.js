@@ -46,7 +46,7 @@ describe('BaseConverter', () => {
 
   describe('convert method', () => {
     test('should apply beforeConvert hook', () => {
-      const beforeConvert = jest.fn(data => ({ ...data, processed: true }));
+      const beforeConvert = vi.fn(data => ({ ...data, processed: true }));
       converter = new BaseConverter({ beforeConvert });
 
       const formData = { name: 'John' };
@@ -254,7 +254,7 @@ describe('BaseConverter', () => {
 
     test('should pass isCreate flag to transformation functions', () => {
       const fieldTransformations = {
-        name: jest.fn((value, data, isCreate) => isCreate ? `${value}_new` : value)
+        name: vi.fn((value, data, isCreate) => isCreate ? `${value}_new` : value)
       };
 
       converter = new BaseConverter({ fieldTransformations });

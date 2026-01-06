@@ -15,7 +15,7 @@ import { useAuth } from "../context/AuthContext";
  */
 const ENTITY_CONFIG = {
   app: {
-    endpoint: (id) => `${process.env.REACT_APP_BACKEND_URL}/admin/apps/${id}`,
+    endpoint: (id) => `${import.meta.env.VITE_BACKEND_URL}/admin/apps/${id}`,
     title: "Application",
     successMessage: "Application deleted successfully",
     successRedirect: "/apps",
@@ -24,7 +24,7 @@ const ENTITY_CONFIG = {
     icon: "bi-box-seam",
   },
   user: {
-    endpoint: (id) => `${process.env.REACT_APP_BACKEND_URL}/admin/users/${id}`,
+    endpoint: (id) => `${import.meta.env.VITE_BACKEND_URL}/admin/users/${id}`,
     title: "User Account",
     successMessage: "User account deleted successfully",
     successRedirect: "/users",
@@ -34,7 +34,7 @@ const ENTITY_CONFIG = {
   },
   // Add more entity types as needed
   // company: {
-  //   endpoint: (id) => `${process.env.REACT_APP_BACKEND_URL}/admin/companies/${id}`,
+  //   endpoint: (id) => `${import.meta.env.VITE_BACKEND_URL}/admin/companies/${id}`,
   //   title: "Company",
   //   successMessage: "Company deleted successfully",
   //   successRedirect: "/companies",
@@ -43,7 +43,7 @@ const ENTITY_CONFIG = {
   //   icon: "bi-building",
   // },
   // profile: {
-  //   endpoint: (id) => `${process.env.REACT_APP_BACKEND_URL}/admin/profiles/${id}`,
+  //   endpoint: (id) => `${import.meta.env.VITE_BACKEND_URL}/admin/profiles/${id}`,
   //   title: "Profile",
   //   successMessage: "Profile deleted successfully",
   //   successRedirect: "/profiles",
@@ -246,7 +246,7 @@ export const useHandleDelete = (id, entityType = 'app') => {
         };
 
         // Assuming you have a batch delete endpoint
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/${entityType}s/batch-delete`, requestOptions);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin/${entityType}s/batch-delete`, requestOptions);
         const data = await response.json();
 
         if (data.error) {

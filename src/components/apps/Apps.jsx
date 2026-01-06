@@ -16,8 +16,8 @@
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from "../../context/AuthContext";
-import NavBar from "../NavBar";
+import { useAuth } from "../../context/AuthContext.jsx";
+import NavBar from "../NavBar.jsx";
 
 // NEW: Sticky Action Bar Component for Apps List
 const AppsStickyActionBar = ({ appCount, onAddNew }) => (
@@ -110,7 +110,7 @@ const Apps = () => {
             headers: headers,
         }
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}/apps`, requestOptions)
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/apps`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (Array.isArray(data)) {
@@ -385,5 +385,5 @@ const Apps = () => {
     </>
 )
 }
-export { Apps };
+export default Apps;
 

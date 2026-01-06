@@ -25,14 +25,14 @@ export const UserActivityLog = () => {
     const fetchData = async () => {
       try {
         // Fetch user info
-        const userResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}`, {
+        const userResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}`, {
           headers: { Authorization: `Bearer ${jwtToken}` }
         });
         const userData = await userResponse.json();
         setUserInfo(userData);
 
         // Fetch activities
-        const activityResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}/activities`, {
+        const activityResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/activities`, {
           headers: { Authorization: `Bearer ${jwtToken}` }
         });
         const activityData = await activityResponse.json();

@@ -168,3 +168,4 @@ export const AnalyticsMetrics = ({ formData, handleChange, errors }) => (
     </div>
   </section>
 );
+export default AnalyticsMetrics;

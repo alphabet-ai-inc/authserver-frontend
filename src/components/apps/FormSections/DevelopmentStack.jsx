@@ -172,3 +172,4 @@ export const DevelopmentStack = ({ formData, handleChange, errors }) => (
     </div>
   </section>
 );
+export default DevelopmentStack;

@@ -135,3 +135,4 @@ export const ComplianceOperations = ({ formData, handleChange, errors }) => {
     </section>
   );
 };
+export default ComplianceOperations;

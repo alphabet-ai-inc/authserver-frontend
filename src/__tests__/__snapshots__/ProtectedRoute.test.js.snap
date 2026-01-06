@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// vi Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProtectedRoute snapshot tests matches authenticated state snapshot 1`] = `
 <DocumentFragment>

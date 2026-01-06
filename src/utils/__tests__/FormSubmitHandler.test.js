@@ -1,7 +1,7 @@
 // src/utils/__tests__/FormSubmitHandler.test.js
 
 // Mock global objects at the very top
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Create a mock FormData class
 global.FormData = class FormData {
@@ -31,7 +31,7 @@ global.FormData = class FormData {
 // Create a mock FileReader
 global.FileReader = class FileReader {
   constructor() {
-    this.readAsDataURL = jest.fn((file) => {
+    this.readAsDataURL = vi.fn((file) => {
       this.file = file;
     });
     this.onload = null;
@@ -51,17 +51,17 @@ import {
 
 describe('Form Submit Handler', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     // Reset environment variable
-    delete process.env.REACT_APP_BACKEND_URL;
+    delete import.meta.env.VITE_BACKEND_URL;
 
     // Mock document methods
-    document.getElementById = jest.fn();
-    document.querySelector = jest.fn();
+    document.getElementById = vi.fn();
+    document.querySelector = vi.fn();
 
     // Mock scrollIntoView
-    Element.prototype.scrollIntoView = jest.fn();
+    Element.prototype.scrollIntoView = vi.fn();
   });
 
   // Test 1: Basic function exports
@@ -98,7 +98,7 @@ describe('Form Submit Handler', () => {
     });
 
     it('should scroll to element with matching id', () => {
-      const mockElement = { scrollIntoView: jest.fn() };
+      const mockElement = { scrollIntoView: vi.fn() };
       document.getElementById.mockReturnValue(mockElement);
 
       scrollToFirstError({ email: 'Invalid email' });
@@ -112,7 +112,7 @@ describe('Form Submit Handler', () => {
 
     it('should find element by name when id not found', () => {
       document.getElementById.mockReturnValue(null);
-      const mockElement = { scrollIntoView: jest.fn() };
+      const mockElement = { scrollIntoView: vi.fn() };
       document.querySelector.mockReturnValue(mockElement);
 
       scrollToFirstError({ email: 'Invalid email' });
@@ -194,8 +194,8 @@ describe('uploadFile', () => {
   it('should upload file successfully', async () => {
     const mockFile = { name: 'test.txt' };
 
-    // Create a mock FormData with Jest mock functions
-    const mockAppend = jest.fn();
+    // Create a mock FormData with vi mock functions
+    const mockAppend = vi.fn();
     const OriginalFormData = global.FormData;
     global.FormData = class MockFormData {
       constructor() {
@@ -212,7 +212,7 @@ describe('uploadFile', () => {
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue({ success: true }),
+      json: vi.fn().mockResolvedValue({ success: true }),
     };
     global.fetch.mockResolvedValue(mockResponse);
 
@@ -244,8 +244,8 @@ describe('uploadFile', () => {
   it('should use custom field name', async () => {
     const mockFile = { name: 'test.txt' };
 
-    // Create a mock FormData with Jest mock functions
-    const mockAppend = jest.fn();
+    // Create a mock FormData with vi mock functions
+    const mockAppend = vi.fn();
     const OriginalFormData = global.FormData;
     global.FormData = class MockFormData {
       constructor() {
@@ -261,7 +261,7 @@ describe('uploadFile', () => {
 
     const mockResponse = {
       ok: true,
-      json: jest.fn().mockResolvedValue({}),
+      json: vi.fn().mockResolvedValue({}),
     };
     global.fetch.mockResolvedValue(mockResponse);
 
@@ -276,13 +276,13 @@ describe('uploadFile', () => {
   // Test 5: handleGenericFormSubmit
   describe('handleGenericFormSubmit', () => {
     const mockEvent = {
-      preventDefault: jest.fn(),
+      preventDefault: vi.fn(),
     };
 
     const createMockFormElement = () => {
       const mockFormElement = {
         id: 'test-form',
-        querySelectorAll: jest.fn(() => []),
+        querySelectorAll: vi.fn(() => []),
       };
       return mockFormElement;
     };
@@ -295,7 +295,7 @@ describe('uploadFile', () => {
       const mockFormElement = createMockFormElement();
       document.getElementById.mockReturnValue(mockFormElement);
 
-      const mockSubmitFn = jest.fn().mockResolvedValue({ id: 1 });
+      const mockSubmitFn = vi.fn().mockResolvedValue({ id: 1 });
 
       await handleGenericFormSubmit({
         event: mockEvent,
@@ -312,7 +312,7 @@ describe('uploadFile', () => {
       const result = await handleGenericFormSubmit({
         event: mockEvent,
         formId: 'non-existent',
-        submitFn: jest.fn(),
+        submitFn: vi.fn(),
       });
 
       expect(result.success).toBe(false);
@@ -323,7 +323,7 @@ describe('uploadFile', () => {
       const mockFormElement = createMockFormElement();
       document.getElementById.mockReturnValue(mockFormElement);
 
-      const mockSubmitFn = jest.fn().mockResolvedValue({ id: 1 });
+      const mockSubmitFn = vi.fn().mockResolvedValue({ id: 1 });
 
       const result = await handleGenericFormSubmit({
         event: mockEvent,
@@ -341,13 +341,13 @@ describe('uploadFile', () => {
       document.getElementById.mockReturnValue(mockFormElement);
 
       const validationErrors = { email: 'Invalid email' };
-      const mockValidateFn = jest.fn().mockReturnValue(validationErrors);
-      const mockOnError = jest.fn();
+      const mockValidateFn = vi.fn().mockReturnValue(validationErrors);
+      const mockOnError = vi.fn();
 
       const result = await handleGenericFormSubmit({
         event: mockEvent,
         formId: 'test-form',
-        submitFn: jest.fn(),
+        submitFn: vi.fn(),
         validateFn: mockValidateFn,
         onError: mockOnError,
       });
@@ -359,8 +359,8 @@ describe('uploadFile', () => {
       const mockFormElement = createMockFormElement();
       document.getElementById.mockReturnValue(mockFormElement);
 
-      const mockSubmitFn = jest.fn().mockRejectedValue(new Error('API Error'));
-      const mockOnError = jest.fn();
+      const mockSubmitFn = vi.fn().mockRejectedValue(new Error('API Error'));
+      const mockOnError = vi.fn();
 
       const result = await handleGenericFormSubmit({
         event: mockEvent,
@@ -400,7 +400,7 @@ describe('uploadFile', () => {
         }
       };
 
-      const mockSubmitFn = jest.fn().mockResolvedValue({ id: 1 });
+      const mockSubmitFn = vi.fn().mockResolvedValue({ id: 1 });
 
       const promise = handleGenericFormSubmit({
         event: mockEvent,

@@ -7,8 +7,8 @@
 const createMockProps = (overrides = {}) => ({
   formData: {},
   errors: {},
-  handleChange: jest.fn(),
-  handlePasswordChange: jest.fn(),
+  handleChange: vi.fn(),
+  handlePasswordChange: vi.fn(),
   isNewUser: false,
   disabled: false,
   ...overrides
@@ -233,7 +233,7 @@ describe('UserAccountSecurity Component Logic', () => {
 
   describe('Event Handler Logic', () => {
     test('calls handlePasswordChange for password field', () => {
-      const mockHandlePasswordChange = jest.fn();
+      const mockHandlePasswordChange = vi.fn();
       const props = createMockProps({
         isNewUser: true,
         handlePasswordChange: mockHandlePasswordChange
@@ -249,7 +249,7 @@ describe('UserAccountSecurity Component Logic', () => {
     });
 
     test('calls handlePasswordChange for confirm password field', () => {
-      const mockHandlePasswordChange = jest.fn();
+      const mockHandlePasswordChange = vi.fn();
       const props = createMockProps({
         isNewUser: true,
         handlePasswordChange: mockHandlePasswordChange
@@ -265,7 +265,7 @@ describe('UserAccountSecurity Component Logic', () => {
     });
 
     test('calls handleChange for checkbox fields', () => {
-      const mockHandleChange = jest.fn();
+      const mockHandleChange = vi.fn();
       const props = createMockProps({
         handleChange: mockHandleChange
       });

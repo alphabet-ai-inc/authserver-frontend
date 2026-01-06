@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProtectedRoute > snapshot tests > matches authenticated state snapshot 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="protected-content"
+  >
+    Protected Content
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ProtectedRoute > snapshot tests > matches loading state snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="container-fluid d-flex justify-content-center align-items-center"
+    style="height: 100vh;"
+  >
+    <div
+      class="text-center"
+    >
+      <div
+        class="spinner-border text-primary"
+        role="status"
+      >
+        <span
+          class="visually-hidden"
+        >
+          Loading...
+        </span>
+      </div>
+      <p
+        class="mt-3 text-muted"
+      >
+        Verifying authentication...
+      </p>
+    </div>
+  </div>
+</DocumentFragment>
+`;

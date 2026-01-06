@@ -6,12 +6,12 @@
  */
 
 // Mock dependencies that would be imported
-const mockValidateUserForm = jest.fn();
-const mockHandleGenericFormSubmit = jest.fn();
-const mockSubmitUserForm = jest.fn();
-const mockFetchUserForEdit = jest.fn();
-const mockFetchUserDetails = jest.fn();
-const mockConvertUserData = jest.fn();
+const mockValidateUserForm = vi.fn();
+const mockHandleGenericFormSubmit = vi.fn();
+const mockSubmitUserForm = vi.fn();
+const mockFetchUserForEdit = vi.fn();
+const mockFetchUserDetails = vi.fn();
+const mockConvertUserData = vi.fn();
 
 // Import the actual helper functions if they exist, or define them inline
 // For this test, we'll define them inline as they're part of the component

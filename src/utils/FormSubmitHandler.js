@@ -26,7 +26,7 @@ export const uploadFile = async (file, endpoint, token, fieldName = 'file') => {
   const formData = new FormData();
   formData.append(fieldName, file);
 
-  const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || ''}${endpoint}`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || ''}${endpoint}`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,

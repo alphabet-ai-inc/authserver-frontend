@@ -22,7 +22,7 @@ export const UserProfile = () => {
 
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/${id}/profile`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${id}/profile`, {
           headers: { Authorization: `Bearer ${jwtToken}` }
         });
         const data = await response.json();

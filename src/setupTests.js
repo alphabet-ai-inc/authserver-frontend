@@ -1,62 +1,62 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// vi-dom adds custom vi matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+// learn more: https://github.com/testing-library/vi-dom
+import '@testing-library/vi-dom';
 
 // Mock SweetAlert2
-jest.mock('sweetalert2', () => ({
-  fire: jest.fn().mockResolvedValue({}),
-  close: jest.fn(),
+vi.mock('sweetalert2', () => ({
+  fire: vi.fn().mockResolvedValue({}),
+  close: vi.fn(),
 }));
 
 // Mock axios
-jest.mock('axios', () => ({
+vi.mock('axios', () => ({
   __esModule: true,
   default: {
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    delete: jest.fn(),
-    create: jest.fn(() => ({
-      get: jest.fn(),
-      post: jest.fn(),
-      put: jest.fn(),
-      delete: jest.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+    create: vi.fn(() => ({
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      delete: vi.fn(),
       interceptors: {
-        request: { use: jest.fn(), eject: jest.fn() },
-        response: { use: jest.fn(), eject: jest.fn() }
+        request: { use: vi.fn(), eject: vi.fn() },
+        response: { use: vi.fn(), eject: vi.fn() }
       }
     })),
     interceptors: {
-      request: { use: jest.fn(), eject: jest.fn() },
-      response: { use: jest.fn(), eject: jest.fn() }
+      request: { use: vi.fn(), eject: vi.fn() },
+      response: { use: vi.fn(), eject: vi.fn() }
     }
   }
 }));
 
 // Mock fetch API for AppFormHandlers tests (ADD THIS)
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Mock console.error to keep test output clean (ADD THIS)
-global.console.error = jest.fn();
+global.console.error = vi.fn();
 
 // Mock matchMedia for any component tests (ADD THIS)
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 
 // Clear all mocks after each test (ADD THIS)
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });

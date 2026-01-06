@@ -8,7 +8,7 @@ export const fetchUserForEdit = async (userId, jwtToken) => {
       'Authorization': `Bearer ${jwtToken}`
     });
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/users/${userId}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin/users/${userId}`, {
       method: 'GET',
       headers
     });
@@ -53,7 +53,7 @@ export const fetchUserForEdit = async (userId, jwtToken) => {
 // // New function with proper name and error handling
 // const fetchDropdownData = async (jwtToken) => {
 //   try {
-//     const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/dropdown-data`, {
+//     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin/dropdown-data`, {
 //       headers: {
 //         'Authorization': `Bearer ${jwtToken}`
 //       }
@@ -118,7 +118,7 @@ export const fetchUserDetails = async (jwtToken) => {
       'Authorization': `Bearer ${jwtToken}`
     });
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/options`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/options`, {
       method: 'GET',
       headers: headers,
       credentials:'include'
@@ -144,8 +144,8 @@ export const submitUserForm = async (formData, userId, jwtToken) => {
 
     const method = isNewUser ? 'POST' : 'PUT';
     const url = isNewUser
-      ? `${process.env.REACT_APP_BACKEND_URL}/admin/users`
-      : `${process.env.REACT_APP_BACKEND_URL}/admin/users/${userId}`;
+      ? `${import.meta.env.VITE_BACKEND_URL}/admin/users`
+      : `${import.meta.env.VITE_BACKEND_URL}/admin/users/${userId}`;
 
     const headers = new Headers({
       'Content-Type': 'application/json',

@@ -10,7 +10,7 @@ export const UserGeneralInformation = ({
         General Information
       </h4>
       <p className="text-muted mb-0 mt-1 small">
-        Basic user indentification details
+        Basic user identification details
       </p>
     </div>
 

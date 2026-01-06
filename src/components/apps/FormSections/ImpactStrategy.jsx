@@ -157,3 +157,4 @@ export const ImpactStrategy = ({ formData, handleChange, errors }) => (
     </div>
   </section>
 );
+export default ImpactStrategy;

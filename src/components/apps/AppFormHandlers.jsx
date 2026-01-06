@@ -6,7 +6,7 @@ import { handleError } from "../../utils/FetchHandling";
  */
 export const fetchAppDetails = async (jwtToken) => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/releases`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/releases`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
         'Content-Type': 'application/json'
@@ -34,8 +34,8 @@ export const fetchAppDetails = async (jwtToken) => {
 export const fetchAppForEdit = async (appId, jwtToken, basePath = 'admin') => {
   try {
     const url = appId === 0
-      ? `${process.env.REACT_APP_BACKEND_URL}/${basePath}/apps/new`
-      : `${process.env.REACT_APP_BACKEND_URL}/${basePath}/apps/${appId}`;
+      ? `${import.meta.env.VITE_BACKEND_URL}/${basePath}/apps/new`
+      : `${import.meta.env.VITE_BACKEND_URL}/${basePath}/apps/${appId}`;
 
     const response = await fetch(url, {
       headers: {
@@ -68,8 +68,8 @@ export const submitAppForm = async (formData, appId, jwtToken, basePath = 'admin
 
     const isCreate = appId === 0;
     const url = isCreate
-      ? `${process.env.REACT_APP_BACKEND_URL}/${basePath}/apps`
-      : `${process.env.REACT_APP_BACKEND_URL}/${basePath}/apps/${appId}`;
+      ? `${import.meta.env.VITE_BACKEND_URL}/${basePath}/apps`
+      : `${import.meta.env.VITE_BACKEND_URL}/${basePath}/apps/${appId}`;
 
     const method = isCreate ? 'POST' : 'PUT';
 
@@ -130,7 +130,7 @@ export const submitAppForm = async (formData, appId, jwtToken, basePath = 'admin
  */
 export const deleteApp = async (appId, jwtToken, basePath = 'admin') => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${basePath}/apps/${appId}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${basePath}/apps/${appId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${jwtToken}`,
@@ -161,7 +161,7 @@ export const uploadAppFile = async (file, appId, fieldName, jwtToken) => {
     formData.append('app_id', appId);
     formData.append('field_name', fieldName);
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin/apps/${appId}/upload`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/admin/apps/${appId}/upload`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${jwtToken}`
@@ -195,7 +195,7 @@ export const fetchAppById = async (appId, jwtToken = null) => {
       headers['Authorization'] = `Bearer ${jwtToken}`;
     }
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/apps/${appId}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/apps/${appId}`, {
       headers: headers,
       credentials: 'include'
     });
@@ -225,7 +225,7 @@ export const fetchAllApps = async (jwtToken = null, basePath = 'apps') => {
       headers['Authorization'] = `Bearer ${jwtToken}`;
     }
 
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/${basePath}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${basePath}`, {
       headers: headers,
       credentials: 'include'
     });

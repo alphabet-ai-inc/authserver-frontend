@@ -3,15 +3,15 @@
 import { fetchWithHandling, handleError } from '../FetchHandling';
 
 // Mock fetch globally
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 
 // Mock console.error and alert
-console.error = jest.fn();
-global.alert = jest.fn();
+console.error = vi.fn();
+global.alert = vi.fn();
 
 describe('fetchWithHandling', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should successfully fetch and return JSON data', async () => {
@@ -19,9 +19,9 @@ describe('fetchWithHandling', () => {
     const mockResponse = {
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockResolvedValue(mockData)
+      json: vi.fn().mockResolvedValue(mockData)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -37,9 +37,9 @@ describe('fetchWithHandling', () => {
     const mockResponse = {
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('text/plain')
+        get: vi.fn().mockReturnValue('text/plain')
       },
-      text: jest.fn().mockResolvedValue(mockText)
+      text: vi.fn().mockResolvedValue(mockText)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -54,9 +54,9 @@ describe('fetchWithHandling', () => {
     const mockResponse = {
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue(null)
+        get: vi.fn().mockReturnValue(null)
       },
-      text: jest.fn().mockResolvedValue(mockText)
+      text: vi.fn().mockResolvedValue(mockText)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -72,9 +72,9 @@ describe('fetchWithHandling', () => {
       ok: false,
       status: 400,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockResolvedValue(mockError)
+      json: vi.fn().mockResolvedValue(mockError)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -90,9 +90,9 @@ describe('fetchWithHandling', () => {
       ok: false,
       status: 400,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockResolvedValue(mockError)
+      json: vi.fn().mockResolvedValue(mockError)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -108,9 +108,9 @@ describe('fetchWithHandling', () => {
       ok: false,
       status: 500,
       headers: {
-        get: jest.fn().mockReturnValue('text/plain')
+        get: vi.fn().mockReturnValue('text/plain')
       },
-      text: jest.fn().mockResolvedValue(mockError)
+      text: vi.fn().mockResolvedValue(mockError)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -125,9 +125,9 @@ describe('fetchWithHandling', () => {
     const mockResponse = {
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockResolvedValue(mockData)
+      json: vi.fn().mockResolvedValue(mockData)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -148,9 +148,9 @@ describe('fetchWithHandling', () => {
     const mockResponse = {
       ok: true,
       headers: {
-        get: jest.fn().mockReturnValue('application/json; charset=utf-8')
+        get: vi.fn().mockReturnValue('application/json; charset=utf-8')
       },
-      json: jest.fn().mockResolvedValue(mockData)
+      json: vi.fn().mockResolvedValue(mockData)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -173,9 +173,9 @@ describe('fetchWithHandling', () => {
       ok: false,
       status: 500,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockRejectedValue(new Error('Invalid JSON'))
+      json: vi.fn().mockRejectedValue(new Error('Invalid JSON'))
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -191,9 +191,9 @@ describe('fetchWithHandling', () => {
       ok: false,
       status: 500,
       headers: {
-        get: jest.fn().mockReturnValue('text/plain')
+        get: vi.fn().mockReturnValue('text/plain')
       },
-      text: jest.fn().mockRejectedValue(new Error('Text parsing error'))
+      text: vi.fn().mockRejectedValue(new Error('Text parsing error'))
     };
 
     global.fetch.mockResolvedValue(mockResponse);
@@ -206,7 +206,7 @@ describe('fetchWithHandling', () => {
 
 describe('handleError', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should log error to console and show alert with error message', () => {
@@ -271,9 +271,9 @@ describe('Integration between fetchWithHandling and handleError', () => {
       ok: false,
       status: 400,
       headers: {
-        get: jest.fn().mockReturnValue('application/json')
+        get: vi.fn().mockReturnValue('application/json')
       },
-      json: jest.fn().mockResolvedValue(mockError)
+      json: vi.fn().mockResolvedValue(mockError)
     };
 
     global.fetch.mockResolvedValue(mockResponse);
