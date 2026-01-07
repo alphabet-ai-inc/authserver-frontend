@@ -13,22 +13,22 @@ jobs:
   deploy:
     name: Deploy Application
     runs-on: ubuntu-latest
-    
+
     # Condition to run on merge (commented out for testing)
     # if: github.event.pull_request.merged == true
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
     - name: Install Vault CLI
       run: |
         wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
         sudo apt update && sudo apt install vault
-    
+
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
@@ -48,13 +48,13 @@ jobs:
         # Temporarily disabled - Vault authentication issues
         # export VAULT_ADDR=${{ secrets.VAULT_ADDR }}
         # export VAULT_TOKEN=${{ secrets.VAULT_TOKEN }}
-        
+
         # Create basic .env file for testing
         cat > .env << EOF
         VITE_BACKEND_URL=http://localhost:8080
         NODE_ENV=production
         EOF
-        
+
         echo "Generated .env file:"
         cat .env
 
@@ -68,40 +68,40 @@ jobs:
 
         for server in "${SERVERS[@]}"; do
           echo "Deploying to server: $server"
-          
+
           # Connect to the server and perform deployment
           ssh -o StrictHostKeyChecking=no root@$server << 'EOF'
             set -e
-            
+
             # Go to the application directory
             cd ${{ secrets.DEPLOY_PATH }}
-            
+
             # Updating code from repository
             echo "Updating repository..."
             git pull origin main
             # FOR TESING!!!
             # git pull origin dev-add_merge_workflow
             # git checkout dev-add_merge_workflow
-            
+
             # Checking the existence and status of a git repository
             if [ ! -d ".git" ]; then
               echo "Error: Not a git repository. Please ensure the directory contains a valid git repository."
               exit 1
             fi
-            
+
             echo "Repository updated successfully"
         EOF
-          
+
           # Copy the .env file to the server
           echo "Copying .env file to server: $server"
           scp -o StrictHostKeyChecking=no .env root@$server:${{ secrets.DEPLOY_PATH }}/.env
-          
+
           # We execute the deploy command
           ssh -o StrictHostKeyChecking=no root@$server << 'EOF'
             set -e
-            
+
             cd ${{ secrets.DEPLOY_PATH }}
-            
+
             # Check for the presence of deploy.sh and perform the appropriate actions
             if [ -f "deploy.sh" ]; then
               echo "Found deploy.sh, executing..."
@@ -111,13 +111,13 @@ jobs:
               echo "deploy.sh not found, running docker compose up -d..."
               docker compose up -d
             fi
-            
+
             echo "Deployment completed successfully"
         EOF
-          
+
           echo "Deployment to $server completed"
         done
-    
+
     - name: Deployment Summary
       run: |
         echo "✅ Deployment completed successfully!"

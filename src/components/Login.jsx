@@ -73,9 +73,16 @@ const Login = () => {
         try {
             // Option 1: Use your existing fetch approach
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/authenticate`, requestOptions);
+
+            if (!response.ok) {
+                // If response is not ok, try to get error message from text
+                const errorText = await response.text();
+                throw new Error(`Authentication failed: ${response.status} ${response.statusText} - ${errorText}`);
+            }
+
             const data = await response.json();
 
-            if (!response.ok || data.error) {
+            if (data.error) {
                 throw new Error(data.message || 'Authentication failed');
             }
 

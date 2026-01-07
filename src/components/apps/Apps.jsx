@@ -385,5 +385,5 @@ const Apps = () => {
     </>
 )
 }
-export default Apps;
+export { Apps };
 

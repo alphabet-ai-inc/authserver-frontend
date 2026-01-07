@@ -24,7 +24,7 @@ const REFRESH_INTERVAL = 600000; // 10 minutes
  * In the future, consider splitting this hook into smaller, more focused hooks for better maintainability. Some times it will be necessary to use only the logout function
  * or the toggleRefresh function or the jwtToken state.
  */
-export default function useAuthSession(backendUrl) {
+export function useAuthSession(backendUrl) {
     if (!backendUrl) throw new Error("backendUrl is required");
 
     const [authState, setAuthState] = useState({

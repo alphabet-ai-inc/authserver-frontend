@@ -435,4 +435,4 @@ const EditApp = () => {
   );
 };
 
-export default EditApp;
+export { EditApp };

@@ -1,5 +1,5 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
-import useAuthSession from '../useAuthSession';
+import { useAuthSession } from '../useAuthSession';
 
 // Mock useNavigate
 const mockNavigate = vi.fn();
